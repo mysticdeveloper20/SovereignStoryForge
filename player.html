@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sovereign StoryForge</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background: #080810;
+    color: #e8e8f0;
+    font-family: 'Georgia', serif;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0f0f1e, #1a1a3e);
+    padding: 16px 20px;
+    text-align: center;
+    border-bottom: 1px solid #2a2a4a;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header h1 {
+    font-size: 16px;
+    color: #a78bfa;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .header p {
+    font-size: 10px;
+    color: #4b5563;
+    margin-top: 3px;
+    letter-spacing: 1px;
+  }
+
+  .main {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ── HOME SCREEN ── */
+  .home-screen { display: block; }
+  .player-screen { display: none; }
+
+  .server-status {
+    background: #111128;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6b7280;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .status-dot.online { background: #10b981; }
+  .status-dot.offline { background: #ef4444; }
+
+  .status-info {
+    flex: 1;
+  }
+
+  .status-info p {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .status-info span {
+    font-size: 11px;
+    color: #4b5563;
+  }
+
+  .btn-refresh {
+    background: transparent;
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    color: #6b7280;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .server-input {
+    background: #111128;
+    border: 1px solid #2a2a4a;
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #e8e8f0;
+    font-size: 13px;
+    width: 100%;
+    outline: none;
+    margin-bottom: 12px;
+    font-family: 'Georgia', serif;
+  }
+
+  .server-input::placeholder { color: #374151; }
+
+  .novel-card {
+    background: linear-gradient(135deg, #1a1a3e, #111128);
+    border: 1px solid #2a2a4a;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .novel-card h2 {
+    font-size: 15px;
+    color: #a78bfa;
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+
+  .novel-card p {
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 16px;
+  }
+
+  .chapter-input-wrap {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .chapter-num-input {
+    background: #0d0d20;
+    border: 1px solid #3b3b6b;
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: #e8e8f0;
+    font-size: 18px;
+    width: 100px;
+    outline: none;
+    text-align: center;
+    font-family: 'Georgia', serif;
+  }
+
+  .btn-fetch {
+    flex: 1;
+    padding: 14px;
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    font-family: 'Georgia', serif;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+
+  .btn-fetch:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .loading-msg {
+    text-align: center;
+    font-size: 13px;
+    color: #7c3aed;
+    padding: 16px;
+    display: none;
+  }
+
+  .error-msg {
+    background: #1a0a0a;
+    border: 1px solid #7f1d1d;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #fca5a5;
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* ── VOICE SETTINGS ── */
+  .settings-card {
+    background: #111128;
+    border: 1px solid #2a2a4a;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .settings-title {
+    font-size: 11px;
+    color: #6b7280;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .setting-label {
+    font-size: 13px;
+    color: #9ca3af;
+  }
+
+  .setting-control {
+    display: flex;
+    gap: 6px;
+  }
+
+  .opt-btn {
+    padding: 5px 10px;
+    border: 1px solid #2a2a4a;
+    border-radius: 6px;
+    background: #0d0d20;
+    color: #6b7280;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .opt-btn.selected {
+    border-color: #7c3aed;
+    color: #a78bfa;
+    background: #1a1a3e;
+  }
+
+  select.voice-pick {
+    background: #0d0d20;
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: #e8e8f0;
+    font-size: 12px;
+    outline: none;
+    max-width: 200px;
+  }
+
+  /* ── PLAYER SCREEN ── */
+  .chapter-hero {
+    background: linear-gradient(135deg, #1a1a3e, #0f0f1e);
+    border: 1px solid #2a2a4a;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .chapter-hero .ep-label {
+    font-size: 10px;
+    color: #7c3aed;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .chapter-hero h2 {
+    font-size: 16px;
+    color: #e8e8f0;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .chapter-hero p {
+    font-size: 11px;
+    color: #4b5563;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    background: #111128;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+
+  .progress-bar-bg {
+    background: #1f2937;
+    border-radius: 4px;
+    height: 4px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .progress-bar-fill {
+    background: linear-gradient(90deg, #7c3aed, #4f46e5);
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s;
+    width: 0%;
+  }
+
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #4b5563;
+  }
+
+  /* Caption box */
+  .caption-box {
+    background: #111128;
+    border: 1px solid #2a2a4a;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    min-height: 140px;
+    position: relative;
+  }
+
+  .caption-label {
+    font-size: 9px;
+    color: #7c3aed;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .caption-text {
+    font-size: 17px;
+    line-height: 1.9;
+    color: #e8e8f0;
+    transition: opacity 0.3s;
+  }
+
+  .caption-text.fading { opacity: 0.3; }
+
+  .caption-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 20px;
+    background: #7c3aed;
+    margin-left: 3px;
+    vertical-align: middle;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Controls */
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .ctrl-btn {
+    padding: 16px 8px;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    background: #111128;
+    color: #9ca3af;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    font-family: 'Georgia', serif;
+  }
+
+  .ctrl-btn:active {
+    background: #1a1a3a;
+    transform: scale(0.97);
+  }
+
+  .ctrl-btn.primary {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    border-color: transparent;
+    color: white;
+    font-size: 22px;
+  }
+
+  /* Speed row */
+  .speed-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #111128;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+  }
+
+  .speed-row span {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .speed-btns {
+    display: flex;
+    gap: 6px;
+  }
+
+  .spd-btn {
+    padding: 5px 10px;
+    border: 1px solid #2a2a4a;
+    border-radius: 6px;
+    background: #0d0d20;
+    color: #6b7280;
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .spd-btn.on {
+    border-color: #7c3aed;
+    color: #a78bfa;
+  }
+
+  /* Auto advance */
+  .auto-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #111128;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+
+  .auto-row-left { }
+
+  .auto-row p {
+    font-size: 13px;
+    color: #e8e8f0;
+  }
+
+  .auto-row span {
+    font-size: 11px;
+    color: #6b7280;
+  }
+
+  .toggle {
+    width: 44px;
+    height: 24px;
+    background: #1f2937;
+    border-radius: 12px;
+    position: relative;
+    transition: background 0.3s;
+    flex-shrink: 0;
+  }
+
+  .toggle.on { background: #7c3aed; }
+
+  .toggle-dot {
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: left 0.3s;
+  }
+
+  .toggle.on .toggle-dot { left: 23px; }
+
+  /* Status */
+  .player-status {
+    text-align: center;
+    font-size: 11px;
+    color: #4b5563;
+    padding: 6px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .player-status.playing { color: #a78bfa; }
+  .player-status.paused { color: #f59e0b; }
+  .player-status.done { color: #10b981; }
+  .player-status.loading { color: #60a5fa; }
+
+  /* Para list */
+  .para-list {
+    background: #111128;
+    border: 1px solid #2a2a4a;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .para-list-hdr {
+    padding: 12px 16px;
+    font-size: 10px;
+    color: #4b5563;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #1f2937;
+  }
+
+  .para-item {
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #4b5563;
+    border-bottom: 1px solid #0f0f1e;
+    cursor: pointer;
+    line-height: 1.5;
+    transition: all 0.15s;
+  }
+
+  .para-item:last-child { border-bottom: none; }
+  .para-item:active { background: #1a1a3a; }
+
+  .para-item.current {
+    color: #e8e8f0;
+    background: #1a1a3a;
+    border-left: 3px solid #7c3aed;
+    padding-left: 13px;
+  }
+
+  .para-item.done { color: #1f2937; }
+
+  .btn-back-home {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    color: #4b5563;
+    font-size: 13px;
+    font-family: 'Georgia', serif;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚔ Sovereign StoryForge</h1>
+  <p>Weakest Beast Tamer Gets All SSS Dragons</p>
+</div>
+
+<div class="main">
+
+  <!-- HOME SCREEN -->
+  <div class="home-screen" id="homeScreen">
+
+    <!-- Server Status -->
+    <div class="server-status">
+      <div class="status-dot" id="statusDot"></div>
+      <div class="status-info">
+        <p id="statusText">Checking server...</p>
+        <span id="statusSub"></span>
+      </div>
+      <button class="btn-refresh" onclick="checkServer()">
+        ↻ Check
+      </button>
+    </div>
+
+    <!-- Server IP input -->
+    <input
+      class="server-input"
+      id="serverIP"
+      placeholder="Server IP (e.g. 192.168.1.5:5000)"
+      type="text"
+    />
+
+    <!-- Novel card -->
+    <div class="novel-card">
+      <h2>Weakest Beast Tamer Gets All SSS Dragons</h2>
+      <p>by Dagzo · Fantasy · 908+ Chapters · Ongoing</p>
+      <div class="chapter-input-wrap">
+        <input
+          class="chapter-num-input"
+          id="chapterNum"
+          type="number"
+          value="363"
+          min="1"
+          max="999"
+        />
+        <button
+          class="btn-fetch"
+          id="fetchBtn"
+          onclick="fetchChapter()"
+        >
+          ▶ &nbsp; Load Chapter
+        </button>
+      </div>
+    </div>
+
+    <div class="loading-msg" id="loadingMsg">
+      ⟳ &nbsp; Fetching chapter from server...
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <!-- Voice settings -->
+    <div class="settings-card">
+      <div class="settings-title">Voice Settings</div>
+
+      <div class="setting-row">
+        <span class="setting-label">Voice</span>
+        <select class="voice-pick" id="voicePick">
+          <option value="">Loading...</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <span class="setting-label">Speed</span>
+        <div class="setting-control">
+          <button class="opt-btn" onclick="setSpeed(0.8)">0.8×</button>
+          <button class="opt-btn selected" onclick="setSpeed(1.0)">1×</button>
+          <button class="opt-btn" onclick="setSpeed(1.15)">1.15×</button>
+          <button class="opt-btn" onclick="setSpeed(1.3)">1.3×</button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span class="setting-label">Dramatic pauses</span>
+        <div class="setting-control">
+          <button class="opt-btn selected" id="pauseOn" onclick="setPauses(true)">On</button>
+          <button class="opt-btn" id="pauseOff" onclick="setPauses(false)">Off</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- PLAYER SCREEN -->
+  <div class="player-screen" id="playerScreen">
+
+    <button class="btn-back-home" onclick="goHome()">
+      ← Back to Chapters
+    </button>
+
+    <div class="chapter-hero">
+      <div class="ep-label">Now Playing</div>
+      <h2 id="chapterTitle">Chapter</h2>
+      <p id="chapterMeta"></p>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar-bg" onclick="seekByClick(event)">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-text">
+        <span id="progCurrent">Para 1</span>
+        <span id="progTotal">of 0</span>
+      </div>
+    </div>
+
+    <div class="caption-box">
+      <div class="caption-label">Reading</div>
+      <div class="caption-text" id="captionText">
+        Press play to begin...
+        <span class="caption-cursor"></span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="ctrl-btn" onclick="skipBack()">
+        ⏮<br><span style="font-size:10px">Back</span>
+      </button>
+      <button class="ctrl-btn primary" id="playBtn" onclick="togglePlay()">
+        ▶
+      </button>
+      <button class="ctrl-btn" onclick="skipForward()">
+        ⏭<br><span style="font-size:10px">Next</span>
+      </button>
+    </div>
+
+    <div class="speed-row">
+      <span>Speed</span>
+      <div class="speed-btns">
+        <button class="spd-btn" onclick="setSpeed(0.8)">0.8×</button>
+        <button class="spd-btn on" onclick="setSpeed(1.0)">1×</button>
+        <button class="spd-btn" onclick="setSpeed(1.15)">1.15×</button>
+        <button class="spd-btn" onclick="setSpeed(1.3)">1.3×</button>
+      </div>
+    </div>
+
+    <div class="auto-row" onclick="toggleAutoAdvance()">
+      <div class="auto-row-left">
+        <p>Auto-advance chapters</p>
+        <span>Loads next chapter automatically</span>
+      </div>
+      <div class="toggle" id="autoToggle">
+        <div class="toggle-dot"></div>
+      </div>
+    </div>
+
+    <div class="player-status" id="playerStatus">Ready</div>
+
+    <div class="para-list">
+      <div class="para-list-hdr">Chapter Paragraphs</div>
+      <div id="paraList"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// ── STATE ─────────────────────────────────────────
+let paragraphs = [];
+let currentIndex = 0;
+let isPlaying = false;
+let isPaused = false;
+let readingSpeed = 1.0;
+let dramaticPauses = true;
+let autoAdvance = true;
+let currentChapter = 363;
+let voices = [];
+let serverIP = 'localhost:8080';
+
+// ── SERVER ────────────────────────────────────────
+function getServerURL() {
+  const input = document.getElementById('serverIP').value.trim();
+  return input ? `http://${input}` : `http://localhost:8080`;
+}
+
+async function checkServer() {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  const sub = document.getElementById('statusSub');
+  
+  dot.className = 'status-dot';
+  txt.textContent = 'Checking...';
+  
+  try {
+    const res = await fetch(`${getServerURL()}/ping`, {
+      signal: AbortSignal.timeout(5000)
+    });
+    const data = await res.json();
+    dot.className = 'status-dot online';
+    txt.textContent = 'Server connected';
+    sub.textContent = data.status;
+  } catch(e) {
+    dot.className = 'status-dot offline';
+    txt.textContent = 'Server offline';
+    sub.textContent = 'Start server.py on your laptop';
+  }
+}
+
+// ── VOICES ───────────────────────────────────────
+function loadVoices() {
+  voices = speechSynthesis.getVoices();
+  const select = document.getElementById('voicePick');
+  select.innerHTML = '';
+  
+  const eng = voices.filter(v => v.lang.startsWith('en'));
+  if (!eng.length) {
+    select.innerHTML = '<option>No voices found</option>';
+    return;
+  }
+  
+  eng.forEach((v, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    const isGood = v.name.includes('Natural') ||
+      v.name.includes('Neural') ||
+      v.name.includes('Enhanced') ||
+      v.name.includes('Premium');
+    opt.textContent = (isGood ? '⭐ ' : '') + v.name;
+    select.appendChild(opt);
+  });
+  
+  // Auto select best
+  const best = eng.findIndex(v =>
+    v.name.includes('Natural') ||
+    v.name.includes('Neural') ||
+    v.name.includes('Enhanced') ||
+    v.name.includes('Guy') ||
+    v.name.includes('Ryan')
+  );
+  select.selectedIndex = best >= 0 ? best : 0;
+}
+
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+// ── FETCH CHAPTER ─────────────────────────────────
+async function fetchChapter() {
+  const num = parseInt(
+    document.getElementById('chapterNum').value
+  );
+  if (!num || num < 1) return;
+  
+  const btn = document.getElementById('fetchBtn');
+  const loading = document.getElementById('loadingMsg');
+  const errMsg = document.getElementById('errorMsg');
+  
+  btn.disabled = true;
+  loading.style.display = 'block';
+  errMsg.style.display = 'none';
+  
+  try {
+    const res = await fetch(
+      `${getServerURL()}/chapter/${num}`,
+      { signal: AbortSignal.timeout(20000) }
+    );
+    
+    if (!res.ok) throw new Error('Chapter not found');
+    
+    const data = await res.json();
+    
+    if (!data.paragraphs || !data.paragraphs.length) {
+      throw new Error('No content found in chapter');
+    }
+    
+    // Load into player
+    loadChapter(data, num);
+    
+  } catch(e) {
+    errMsg.textContent = '⚠ ' + (
+      e.message.includes('fetch') 
+        ? 'Cannot reach server. Make sure server.py is running on your laptop and enter the correct IP.'
+        : e.message
+    );
+    errMsg.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    loading.style.display = 'none';
+  }
+}
+
+// ── LOAD CHAPTER ──────────────────────────────────
+function loadChapter(data, chapterNum) {
+  paragraphs = data.paragraphs;
+  currentChapter = chapterNum;
+  currentIndex = 0;
+  isPlaying = false;
+  isPaused = false;
+  speechSynthesis.cancel();
+  
+  document.getElementById('chapterTitle').textContent =
+    data.title;
+  document.getElementById('chapterMeta').textContent =
+    `Chapter ${chapterNum} · ${paragraphs.length} paragraphs`;
+  
+  renderParaList();
+  updateProgress();
+  
+  document.getElementById('captionText').innerHTML =
+    paragraphs[0] +
+    '<span class="caption-cursor"></span>';
+  
+  document.getElementById('playBtn').textContent = '▶';
+  setPlayerStatus('', 'Ready — press play');
+  
+  // Switch to player
+  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('playerScreen').style.display = 'block';
+}
+
+// ── READING ───────────────────────────────────────
+function analyseText(text) {
+  const isAction = /slammed|roared|charged|exploded|attacked|struck|battle|fight|kill|death|power|rage|fury|dragon|beast/i.test(text);
+  const isEmotional = /tears|heart|whispered|silent|alone|fear|hope|dream|love|lost|pain|grief/i.test(text);
+  const isCliffhanger = text.endsWith('...') || text.endsWith('?!') || text.endsWith('!');
+  const isDialogue = text.startsWith('"') || text.startsWith('"');
+  const isLong = text.length > 250;
+  
+  return { isAction, isEmotional, isCliffhanger, isDialogue, isLong };
+}
+
+function readParagraph(index) {
+  if (index >= paragraphs.length) {
+    onChapterEnd();
+    return;
+  }
+  
+  currentIndex = index;
+  const text = paragraphs[index];
+  const mood = analyseText(text);
+  
+  // Update caption
+  const caption = document.getElementById('captionText');
+  caption.classList.add('fading');
+  setTimeout(() => {
+    caption.innerHTML = text +
+      '<span class="caption-cursor"></span>';
+    caption.classList.remove('fading');
+  }, 200);
+  
+  updateParaList();
+  updateProgress();
+  
+  // Build utterance
+  const utt = new SpeechSynthesisUtterance(text);
+  
+  // Speed adjustments based on mood
+  if (mood.isAction) {
+    utt.rate = readingSpeed * 1.08;
+    utt.pitch = 0.95;
+  } else if (mood.isEmotional) {
+    utt.rate = readingSpeed * 0.9;
+    utt.pitch = 1.05;
+  } else if (mood.isCliffhanger) {
+    utt.rate = readingSpeed * 0.88;
+    utt.pitch = 1.0;
+  } else if (mood.isDialogue) {
+    utt.rate = readingSpeed * 0.95;
+    utt.pitch = 1.05;
+  } else {
+    utt.rate = readingSpeed;
+    utt.pitch = 1.0;
+  }
+  
+  utt.volume = 1.0;
+  
+  // Set voice
+  const eng = voices.filter(v => v.lang.startsWith('en'));
+  const sel = document.getElementById('voicePick');
+  if (eng[sel.selectedIndex]) {
+    utt.voice = eng[sel.selectedIndex];
+  }
+  
+  utt.onend = () => {
+    if (!isPlaying || isPaused) return;
+    
+    // Pause duration based on mood
+    let pause = 350;
+    if (dramaticPauses) {
+      if (mood.isCliffhanger) pause = 1200;
+      else if (mood.isEmotional) pause = 800;
+      else if (mood.isAction) pause = 200;
+      else if (mood.isLong) pause = 600;
+    }
+    
+    setTimeout(() => {
+      if (isPlaying && !isPaused) {
+        readParagraph(currentIndex + 1);
+      }
+    }, pause);
+  };
+  
+  utt.onerror = () => {
+    if (isPlaying && !isPaused) {
+      readParagraph(currentIndex + 1);
+    }
+  };
+  
+  speechSynthesis.speak(utt);
+  
+  const moodLabel = mood.isAction ? '⚔ Action' :
+    mood.isEmotional ? '💙 Emotional' :
+    mood.isCliffhanger ? '⚡ Intense' :
+    mood.isDialogue ? '💬 Dialogue' : '📖 Narration';
+  
+  setPlayerStatus('playing', moodLabel);
+}
+
+async function onChapterEnd() {
+  isPlaying = false;
+  document.getElementById('playBtn').textContent = '▶';
+  
+  if (autoAdvance) {
+    setPlayerStatus('loading',
+      `Loading Chapter ${currentChapter + 1}...`
+    );
+    document.getElementById('captionText').innerHTML =
+      `⟳ Loading Chapter ${currentChapter + 1}...` +
+      '<span class="caption-cursor"></span>';
+    
+    try {
+      const res = await fetch(
+        `${getServerURL()}/chapter/${currentChapter + 1}`,
+        { signal: AbortSignal.timeout(20000) }
+      );
+      const data = await res.json();
+      if (data.paragraphs && data.paragraphs.length) {
+        loadChapter(data, currentChapter + 1);
+        // Auto start next chapter
+        setTimeout(() => {
+          isPlaying = true;
+          document.getElementById('playBtn').textContent = '⏸';
+          readParagraph(0);
+        }, 1500);
+      }
+    } catch(e) {
+      setPlayerStatus('done', 'Chapter complete');
+      document.getElementById('captionText').innerHTML =
+        '✓ Chapter complete — auto-advance failed, load next manually';
+    }
+  } else {
+    setPlayerStatus('done', 'Chapter complete');
+    document.getElementById('captionText').innerHTML =
+      '✓ Chapter complete';
+  }
+}
+
+// ── CONTROLS ──────────────────────────────────────
+function togglePlay() {
+  if (!paragraphs.length) return;
+  
+  if (!isPlaying) {
+    isPlaying = true;
+    isPaused = false;
+    document.getElementById('playBtn').textContent = '⏸';
+    if (speechSynthesis.paused) {
+      speechSynthesis.resume();
+      setPlayerStatus('playing', 'Playing');
+    } else {
+      readParagraph(currentIndex);
+    }
+  } else if (!isPaused) {
+    isPaused = true;
+    speechSynthesis.pause();
+    document.getElementById('playBtn').textContent = '▶';
+    setPlayerStatus('paused', 'Paused');
+  } else {
+    isPaused = false;
+    speechSynthesis.resume();
+    document.getElementById('playBtn').textContent = '⏸';
+    setPlayerStatus('playing', 'Playing');
+  }
+}
+
+function skipForward() {
+  speechSynthesis.cancel();
+  if (currentIndex < paragraphs.length - 1) {
+    if (isPlaying) readParagraph(currentIndex + 1);
+    else {
+      currentIndex++;
+      updateParaList();
+      updateProgress();
+      document.getElementById('captionText').innerHTML =
+        paragraphs[currentIndex] +
+        '<span class="caption-cursor"></span>';
+    }
+  }
+}
+
+function skipBack() {
+  speechSynthesis.cancel();
+  if (currentIndex > 0) {
+    if (isPlaying) readParagraph(currentIndex - 1);
+    else {
+      currentIndex--;
+      updateParaList();
+      updateProgress();
+      document.getElementById('captionText').innerHTML =
+        paragraphs[currentIndex] +
+        '<span class="caption-cursor"></span>';
+    }
+  }
+}
+
+function jumpTo(index) {
+  speechSynthesis.cancel();
+  currentIndex = index;
+  if (isPlaying) {
+    readParagraph(index);
+  } else {
+    updateParaList();
+    updateProgress();
+    document.getElementById('captionText').innerHTML =
+      paragraphs[index] +
+      '<span class="caption-cursor"></span>';
+  }
+}
+
+function seekByClick(e) {
+  const bar = e.currentTarget;
+  const pct = e.offsetX / bar.offsetWidth;
+  const target = Math.floor(pct * paragraphs.length);
+  jumpTo(Math.max(0, Math.min(target, paragraphs.length - 1)));
+}
+
+function setSpeed(s) {
+  readingSpeed = s;
+  document.querySelectorAll('.opt-btn, .spd-btn')
+    .forEach(b => {
+      if (b.textContent === s + '×') b.classList.add('selected', 'on');
+      else { b.classList.remove('selected'); b.classList.remove('on'); }
+    });
+}
+
+function setPauses(on) {
+  dramaticPauses = on;
+  document.getElementById('pauseOn').className =
+    'opt-btn' + (on ? ' selected' : '');
+  document.getElementById('pauseOff').className =
+    'opt-btn' + (!on ? ' selected' : '');
+}
+
+function toggleAutoAdvance() {
+  autoAdvance = !autoAdvance;
+  const t = document.getElementById('autoToggle');
+  t.className = 'toggle' + (autoAdvance ? ' on' : '');
+}
+
+// ── UI HELPERS ────────────────────────────────────
+function renderParaList() {
+  const list = document.getElementById('paraList');
+  list.innerHTML = '';
+  paragraphs.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'para-item' +
+      (i === currentIndex ? ' current' : '') +
+      (i < currentIndex ? ' done' : '');
+    div.id = `p${i}`;
+    div.textContent = p.substring(0, 90) +
+      (p.length > 90 ? '...' : '');
+    div.onclick = () => jumpTo(i);
+    list.appendChild(div);
+  });
+}
+
+function updateParaList() {
+  paragraphs.forEach((_, i) => {
+    const el = document.getElementById(`p${i}`);
+    if (!el) return;
+    el.className = 'para-item' +
+      (i === currentIndex ? ' current' : '') +
+      (i < currentIndex ? ' done' : '');
+  });
+  const cur = document.getElementById(`p${currentIndex}`);
+  if (cur) cur.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function updateProgress() {
+  const pct = paragraphs.length
+    ? (currentIndex / paragraphs.length) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progCurrent').textContent =
+    `Para ${currentIndex + 1}`;
+  document.getElementById('progTotal').textContent =
+    `of ${paragraphs.length}`;
+}
+
+function setPlayerStatus(type, text) {
+  const el = document.getElementById('playerStatus');
+  el.className = 'player-status ' + type;
+  el.textContent = text;
+}
+
+function goHome() {
+  speechSynthesis.cancel();
+  isPlaying = false;
+  isPaused = false;
+  document.getElementById('playBtn').textContent = '▶';
+  document.getElementById('homeScreen').style.display = 'block';
+  document.getElementById('playerScreen').style.display = 'none';
+}
+
+// ── INIT ──────────────────────────────────────────
+checkServer();
+</script>
+
+</body>
+</html>
