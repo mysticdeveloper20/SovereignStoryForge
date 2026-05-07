@@ -259,15 +259,6 @@
     height: calc(100vh - 60px);
   }
 
-  .player-top {
-    flex-shrink: 0;
-  }
-
-  .player-bottom {
-    flex: 1;
-    overflow-y: auto;
-    padding-bottom: 20px;
-  }
 
   .chapter-hero {
     background: linear-gradient(135deg, #1e1a14, #12100e);
@@ -658,7 +649,7 @@
     <div class="player-layout">
 
       <!-- FIXED TOP SECTION -->
-      <div class="player-top">
+      <div>
 
         <button class="btn-back-home" onclick="goHome()">← Back to Chapters</button>
 
@@ -711,7 +702,7 @@
           </div>
         </div>
 
-        <div class="player-status" id="playerStatus">Ready</div>
+        <div>
 
       </div>
 
