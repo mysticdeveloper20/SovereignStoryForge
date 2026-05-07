@@ -1223,8 +1223,6 @@ function updateParaList() {
       (i === currentIndex ? ' current' : '') +
       (i < currentIndex ? ' done' : '');
   });
-  const cur = document.getElementById(`p${currentIndex}`);
-  if (cur) cur.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function updateProgress() {
