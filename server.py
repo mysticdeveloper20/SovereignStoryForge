@@ -131,6 +131,13 @@ def ping():
 
 port = int(os.environ.get('PORT', 8080))
 
+@app.route('/manifest.json')
+def serve_manifest():
+        manifest_path = os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)),
+                    'manifest.json'
+        )
+        return send_file(manifest_path, mimetype='application/manifest+json')
 if __name__ == '__main__':
     print("Sovereign StoryForge Server")
     print(f"Running on http://localhost:{port}")
