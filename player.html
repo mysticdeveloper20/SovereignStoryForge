@@ -724,12 +724,12 @@ let dramaticPauses = true;
 let autoAdvance = true;
 let currentChapter = 363;
 let voices = [];
-let serverIP = 'localhost:8080';
+let serverIP = 'sovereignstoryforge.onrender.com';
 
 // ── SERVER ────────────────────────────────────────
 function getServerURL() {
   const input = document.getElementById('serverIP').value.trim();
-  return input ? `http://${input}` : `http://localhost:8080`;
+  return input ? `http://${input}` : `http://sovereignstoryforge.onrender.com`;
 }
 
 async function checkServer() {
