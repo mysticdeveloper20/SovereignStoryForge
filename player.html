@@ -839,13 +839,18 @@ function loadBookmark() {
 }
 
 function checkBookmark() {
-  const bm = loadBookmark();
-  if (!bm) return;
-  const info = document.getElementById('bookmarkInfo');
-  const text = document.getElementById('bookmarkText');
-  info.style.display = 'block';
-  text.textContent = `Chapter ${bm.chapter}, paragraph ${bm.paraIndex + 1}`;
-  document.getElementById('chapterNum').value = bm.chapter;
+  try {
+    const bm = loadBookmark();
+    if (!bm) return;
+    const info = document.getElementById('bookmarkInfo');
+    const text = document.getElementById('bookmarkText');
+    if (!info || !text) return;
+    info.style.display = 'block';
+    text.textContent = `Chapter ${bm.chapter}, paragraph ${bm.paraIndex + 1}`;
+    document.getElementById('chapterNum').value = bm.chapter;
+  } catch(e) {
+    console.log('Bookmark error:', e);
+  }
 }
 
 async function resumeBookmark() {
