@@ -1248,8 +1248,8 @@ function restorePreferences() {
 
 // ── INIT ──────────────────────────────────────────
 checkServer();
-checkBookmark();
 restorePreferences();
+setTimeout(checkBookmark, 500);
 </script>
 
 </body>
