@@ -3,57 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a1410">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="StoryForge">
+<link rel="manifest" href="/manifest.json">
 <title>Sovereign StoryForge</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   
   body {
-    background: #080810;
-    color: #e8e8f0;
+    background: #12100e;
+    color: #e8dcc8;
     font-family: 'Georgia', serif;
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   .header {
-    background: linear-gradient(135deg, #0f0f1e, #1a1a3e);
-    padding: 16px 20px;
+    background: #1a1410;
+    padding: 14px 20px;
     text-align: center;
-    border-bottom: 1px solid #2a2a4a;
+    border-bottom: 1px solid #2a2018;
     position: sticky;
     top: 0;
     z-index: 100;
   }
 
   .header h1 {
-    font-size: 16px;
-    color: #a78bfa;
+    font-size: 15px;
+    color: #c9a84c;
     letter-spacing: 3px;
     text-transform: uppercase;
   }
 
   .header p {
     font-size: 10px;
-    color: #4b5563;
+    color: #6b5d4a;
     margin-top: 3px;
     letter-spacing: 1px;
   }
 
   .main {
-    padding: 20px;
+    padding: 16px;
     max-width: 600px;
     margin: 0 auto;
+    width: 100%;
   }
 
-  /* ── HOME SCREEN ── */
+  /* HOME SCREEN */
   .home-screen { display: block; }
   .player-screen { display: none; }
 
   .server-status {
-    background: #111128;
-    border: 1px solid #2a2a4a;
+    background: #1a1410;
+    border: 1px solid #2a2018;
     border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 16px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -63,44 +70,35 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #6b7280;
+    background: #4a3a28;
     margin-right: 10px;
     flex-shrink: 0;
   }
 
-  .status-dot.online { background: #10b981; }
-  .status-dot.offline { background: #ef4444; }
+  .status-dot.online { background: #7a9a5a; }
+  .status-dot.offline { background: #9a5a4a; }
 
-  .status-info {
-    flex: 1;
-  }
-
-  .status-info p {
-    font-size: 12px;
-    color: #6b7280;
-  }
-
-  .status-info span {
-    font-size: 11px;
-    color: #4b5563;
-  }
+  .status-info { flex: 1; }
+  .status-info p { font-size: 12px; color: #a09070; }
+  .status-info span { font-size: 11px; color: #6b5d4a; }
 
   .btn-refresh {
     background: transparent;
-    border: 1px solid #2a2a4a;
+    border: 1px solid #2a2018;
     border-radius: 8px;
-    color: #6b7280;
+    color: #6b5d4a;
     padding: 6px 12px;
     font-size: 12px;
     cursor: pointer;
+    font-family: 'Georgia', serif;
   }
 
   .server-input {
-    background: #111128;
-    border: 1px solid #2a2a4a;
+    background: #1a1410;
+    border: 1px solid #2a2018;
     border-radius: 10px;
     padding: 12px 16px;
-    color: #e8e8f0;
+    color: #e8dcc8;
     font-size: 13px;
     width: 100%;
     outline: none;
@@ -108,27 +106,27 @@
     font-family: 'Georgia', serif;
   }
 
-  .server-input::placeholder { color: #374151; }
+  .server-input::placeholder { color: #4a3a28; }
 
   .novel-card {
-    background: linear-gradient(135deg, #1a1a3e, #111128);
-    border: 1px solid #2a2a4a;
+    background: linear-gradient(135deg, #1e1a14, #1a1410);
+    border: 1px solid #2a2018;
     border-radius: 16px;
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     text-align: center;
   }
 
   .novel-card h2 {
-    font-size: 15px;
-    color: #a78bfa;
+    font-size: 16px;
+    color: #c9a84c;
     line-height: 1.4;
     margin-bottom: 6px;
   }
 
   .novel-card p {
     font-size: 11px;
-    color: #6b7280;
+    color: #6b5d4a;
     margin-bottom: 16px;
   }
 
@@ -139,11 +137,11 @@
   }
 
   .chapter-num-input {
-    background: #0d0d20;
-    border: 1px solid #3b3b6b;
+    background: #12100e;
+    border: 1px solid #3a2a18;
     border-radius: 10px;
     padding: 14px 16px;
-    color: #e8e8f0;
+    color: #e8dcc8;
     font-size: 18px;
     width: 100px;
     outline: none;
@@ -154,52 +152,49 @@
   .btn-fetch {
     flex: 1;
     padding: 14px;
-    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    background: linear-gradient(135deg, #8a6a2a, #c9a84c);
     border: none;
     border-radius: 10px;
-    color: white;
+    color: #12100e;
     font-size: 14px;
     font-family: 'Georgia', serif;
     cursor: pointer;
     letter-spacing: 1px;
+    font-weight: bold;
   }
 
-  .btn-fetch:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  .btn-fetch:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .loading-msg {
     text-align: center;
     font-size: 13px;
-    color: #7c3aed;
+    color: #c9a84c;
     padding: 16px;
     display: none;
   }
 
   .error-msg {
-    background: #1a0a0a;
-    border: 1px solid #7f1d1d;
+    background: #1a0e0e;
+    border: 1px solid #4a2a2a;
     border-radius: 10px;
     padding: 12px 16px;
     font-size: 13px;
-    color: #fca5a5;
+    color: #c08080;
     margin-top: 12px;
     display: none;
   }
 
-  /* ── VOICE SETTINGS ── */
   .settings-card {
-    background: #111128;
-    border: 1px solid #2a2a4a;
+    background: #1a1410;
+    border: 1px solid #2a2018;
     border-radius: 16px;
     padding: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .settings-title {
-    font-size: 11px;
-    color: #6b7280;
+    font-size: 10px;
+    color: #6b5d4a;
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: 14px;
@@ -212,97 +207,118 @@
     margin-bottom: 12px;
   }
 
-  .setting-label {
-    font-size: 13px;
-    color: #9ca3af;
-  }
+  .setting-label { font-size: 13px; color: #a09070; }
 
-  .setting-control {
-    display: flex;
-    gap: 6px;
-  }
+  .setting-control { display: flex; gap: 6px; }
 
   .opt-btn {
     padding: 5px 10px;
-    border: 1px solid #2a2a4a;
+    border: 1px solid #2a2018;
     border-radius: 6px;
-    background: #0d0d20;
-    color: #6b7280;
+    background: #12100e;
+    color: #6b5d4a;
     font-size: 11px;
     cursor: pointer;
-    transition: all 0.2s;
+    font-family: 'Georgia', serif;
   }
 
   .opt-btn.selected {
-    border-color: #7c3aed;
-    color: #a78bfa;
-    background: #1a1a3e;
+    border-color: #c9a84c;
+    color: #c9a84c;
+    background: #1e1a10;
   }
 
   select.voice-pick {
-    background: #0d0d20;
-    border: 1px solid #2a2a4a;
+    background: #12100e;
+    border: 1px solid #2a2018;
     border-radius: 8px;
     padding: 6px 10px;
-    color: #e8e8f0;
+    color: #e8dcc8;
     font-size: 12px;
     outline: none;
     max-width: 200px;
   }
 
-  /* ── PLAYER SCREEN ── */
+  /* BOOKMARK */
+  .bookmark-info {
+    background: #1a1a10;
+    border: 1px solid #3a3018;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: #c9a84c;
+    display: none;
+    cursor: pointer;
+  }
+
+  /* PLAYER SCREEN */
+  .player-layout {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+  }
+
+  .player-top {
+    flex-shrink: 0;
+  }
+
+  .player-bottom {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+  }
+
   .chapter-hero {
-    background: linear-gradient(135deg, #1a1a3e, #0f0f1e);
-    border: 1px solid #2a2a4a;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 16px;
+    background: linear-gradient(135deg, #1e1a14, #12100e);
+    border: 1px solid #2a2018;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
     text-align: center;
   }
 
   .chapter-hero .ep-label {
-    font-size: 10px;
-    color: #7c3aed;
+    font-size: 9px;
+    color: #c9a84c;
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .chapter-hero h2 {
-    font-size: 16px;
-    color: #e8e8f0;
-    line-height: 1.5;
     margin-bottom: 6px;
   }
 
-  .chapter-hero p {
-    font-size: 11px;
-    color: #4b5563;
+  .chapter-hero h2 {
+    font-size: 15px;
+    color: #e8dcc8;
+    line-height: 1.4;
+    margin-bottom: 4px;
   }
+
+  .chapter-hero p { font-size: 11px; color: #6b5d4a; }
 
   /* Progress */
   .progress-wrap {
-    background: #111128;
-    border: 1px solid #2a2a4a;
+    background: #1a1410;
+    border: 1px solid #2a2018;
     border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 16px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
   }
 
   .progress-bar-bg {
-    background: #1f2937;
+    background: #2a2018;
     border-radius: 4px;
-    height: 4px;
+    height: 6px;
     margin-bottom: 8px;
     overflow: hidden;
     cursor: pointer;
+    position: relative;
   }
 
   .progress-bar-fill {
-    background: linear-gradient(90deg, #7c3aed, #4f46e5);
+    background: linear-gradient(90deg, #8a6a2a, #c9a84c);
     height: 100%;
     border-radius: 4px;
-    transition: width 0.5s;
+    transition: width 0.3s;
     width: 0%;
   }
 
@@ -310,50 +326,40 @@
     display: flex;
     justify-content: space-between;
     font-size: 11px;
-    color: #4b5563;
+    color: #6b5d4a;
   }
 
   /* Caption box */
   .caption-box {
-    background: #111128;
-    border: 1px solid #2a2a4a;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 16px;
-    min-height: 140px;
-    position: relative;
+    background: #1a1410;
+    border: 1px solid #2a2018;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 12px;
+    min-height: 130px;
   }
 
   .caption-label {
     font-size: 9px;
-    color: #7c3aed;
+    color: #c9a84c;
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .caption-text {
     font-size: 17px;
     line-height: 1.9;
-    color: #e8e8f0;
-    transition: opacity 0.3s;
+    color: #c8b890;
   }
 
-  .caption-text.fading { opacity: 0.3; }
+  .word { display: inline; }
 
-  .caption-cursor {
-    display: inline-block;
-    width: 2px;
-    height: 20px;
-    background: #7c3aed;
-    margin-left: 3px;
-    vertical-align: middle;
-    animation: blink 1s infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+  .word.active {
+    background: #3a2a10;
+    color: #f0d080;
+    border-radius: 3px;
+    padding: 0 2px;
   }
 
   /* Controls */
@@ -361,112 +367,92 @@
     display: grid;
     grid-template-columns: 1fr 1.4fr 1fr;
     gap: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .ctrl-btn {
-    padding: 16px 8px;
-    border: 1px solid #2a2a4a;
+    padding: 14px 8px;
+    border: 1px solid #2a2018;
     border-radius: 12px;
-    background: #111128;
-    color: #9ca3af;
+    background: #1a1410;
+    color: #a09070;
     font-size: 13px;
     cursor: pointer;
     text-align: center;
-    transition: all 0.15s;
     font-family: 'Georgia', serif;
   }
 
-  .ctrl-btn:active {
-    background: #1a1a3a;
-    transform: scale(0.97);
-  }
+  .ctrl-btn:active { background: #2a1e10; }
 
   .ctrl-btn.primary {
-    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    background: linear-gradient(135deg, #8a6a2a, #c9a84c);
     border-color: transparent;
-    color: white;
+    color: #12100e;
     font-size: 22px;
+    font-weight: bold;
   }
 
-  /* Speed row */
+  /* Speed */
   .speed-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #111128;
-    border: 1px solid #2a2a4a;
+    background: #1a1410;
+    border: 1px solid #2a2018;
     border-radius: 12px;
-    padding: 12px 16px;
-    margin-bottom: 12px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
   }
 
-  .speed-row span {
-    font-size: 12px;
-    color: #6b7280;
-  }
+  .speed-row span { font-size: 12px; color: #6b5d4a; }
 
-  .speed-btns {
-    display: flex;
-    gap: 6px;
-  }
+  .speed-btns { display: flex; gap: 6px; }
 
   .spd-btn {
     padding: 5px 10px;
-    border: 1px solid #2a2a4a;
+    border: 1px solid #2a2018;
     border-radius: 6px;
-    background: #0d0d20;
-    color: #6b7280;
+    background: #12100e;
+    color: #6b5d4a;
     font-size: 11px;
     cursor: pointer;
+    font-family: 'Georgia', serif;
   }
 
-  .spd-btn.on {
-    border-color: #7c3aed;
-    color: #a78bfa;
-  }
+  .spd-btn.on { border-color: #c9a84c; color: #c9a84c; }
 
   /* Auto advance */
   .auto-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #111128;
-    border: 1px solid #2a2a4a;
+    background: #1a1410;
+    border: 1px solid #2a2018;
     border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 16px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
     cursor: pointer;
   }
 
-  .auto-row-left { }
-
-  .auto-row p {
-    font-size: 13px;
-    color: #e8e8f0;
-  }
-
-  .auto-row span {
-    font-size: 11px;
-    color: #6b7280;
-  }
+  .auto-row p { font-size: 13px; color: #e8dcc8; }
+  .auto-row span { font-size: 11px; color: #6b5d4a; }
 
   .toggle {
     width: 44px;
     height: 24px;
-    background: #1f2937;
+    background: #2a2018;
     border-radius: 12px;
     position: relative;
     transition: background 0.3s;
     flex-shrink: 0;
   }
 
-  .toggle.on { background: #7c3aed; }
+  .toggle.on { background: #8a6a2a; }
 
   .toggle-dot {
     width: 18px;
     height: 18px;
-    background: white;
+    background: #e8dcc8;
     border-radius: 50%;
     position: absolute;
     top: 3px;
@@ -480,68 +466,98 @@
   .player-status {
     text-align: center;
     font-size: 11px;
-    color: #4b5563;
-    padding: 6px;
+    color: #4a3a28;
+    padding: 4px;
     letter-spacing: 1px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
-  .player-status.playing { color: #a78bfa; }
-  .player-status.paused { color: #f59e0b; }
-  .player-status.done { color: #10b981; }
-  .player-status.loading { color: #60a5fa; }
+  .player-status.playing { color: #c9a84c; }
+  .player-status.paused { color: #a09070; }
+  .player-status.done { color: #7a9a5a; }
+  .player-status.loading { color: #8090a0; }
 
   /* Para list */
   .para-list {
-    background: #111128;
-    border: 1px solid #2a2a4a;
-    border-radius: 16px;
+    background: #1a1410;
+    border: 1px solid #2a2018;
+    border-radius: 14px;
     overflow: hidden;
-    margin-bottom: 20px;
   }
 
   .para-list-hdr {
-    padding: 12px 16px;
+    padding: 10px 16px;
     font-size: 10px;
-    color: #4b5563;
+    color: #6b5d4a;
     letter-spacing: 2px;
     text-transform: uppercase;
-    border-bottom: 1px solid #1f2937;
+    border-bottom: 1px solid #2a2018;
+    position: sticky;
+    top: 0;
+    background: #1a1410;
   }
 
   .para-item {
-    padding: 12px 16px;
+    padding: 10px 16px;
     font-size: 12px;
-    color: #4b5563;
-    border-bottom: 1px solid #0f0f1e;
+    color: #6b5d4a;
+    border-bottom: 1px solid #12100e;
     cursor: pointer;
     line-height: 1.5;
-    transition: all 0.15s;
   }
 
   .para-item:last-child { border-bottom: none; }
-  .para-item:active { background: #1a1a3a; }
+  .para-item:active { background: #2a1e10; }
 
   .para-item.current {
-    color: #e8e8f0;
-    background: #1a1a3a;
-    border-left: 3px solid #7c3aed;
+    color: #e8dcc8;
+    background: #2a1e10;
+    border-left: 3px solid #c9a84c;
     padding-left: 13px;
   }
 
-  .para-item.done { color: #1f2937; }
+  .para-item.done { color: #2a2018; }
 
   .btn-back-home {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     background: transparent;
-    border: 1px solid #2a2a4a;
+    border: 1px solid #2a2018;
     border-radius: 12px;
-    color: #4b5563;
+    color: #6b5d4a;
     font-size: 13px;
     font-family: 'Georgia', serif;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
+  }
+
+  /* Install banner */
+  .install-banner {
+    background: #1e1a10;
+    border: 1px solid #3a2a10;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    display: none;
+  }
+
+  .install-banner p { font-size: 12px; color: #c9a84c; }
+  .install-banner span { font-size: 11px; color: #6b5d4a; }
+
+  .btn-install {
+    background: linear-gradient(135deg, #8a6a2a, #c9a84c);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: #12100e;
+    font-size: 12px;
+    font-family: 'Georgia', serif;
+    cursor: pointer;
+    font-weight: bold;
+    flex-shrink: 0;
   }
 </style>
 </head>
@@ -549,7 +565,7 @@
 
 <div class="header">
   <h1>⚔ Sovereign StoryForge</h1>
-  <p>Weakest Beast Tamer Gets All SSS Dragons</p>
+  <p>Your Personal Story Player</p>
 </div>
 
 <div class="main">
@@ -557,27 +573,34 @@
   <!-- HOME SCREEN -->
   <div class="home-screen" id="homeScreen">
 
-    <!-- Server Status -->
+    <div class="install-banner" id="installBanner">
+      <div>
+        <p>Install as App</p>
+        <span>Add to home screen for best experience</span>
+      </div>
+      <button class="btn-install" onclick="installApp()">Install</button>
+    </div>
+
     <div class="server-status">
       <div class="status-dot" id="statusDot"></div>
       <div class="status-info">
         <p id="statusText">Checking server...</p>
         <span id="statusSub"></span>
       </div>
-      <button class="btn-refresh" onclick="checkServer()">
-        ↻ Check
-      </button>
+      <button class="btn-refresh" onclick="checkServer()">↻ Check</button>
     </div>
 
-    <!-- Server IP input -->
     <input
       class="server-input"
       id="serverIP"
-      placeholder="Server IP (e.g. 192.168.1.5:5000)"
+      placeholder="Custom server IP (optional)"
       type="text"
     />
 
-    <!-- Novel card -->
+    <div class="bookmark-info" id="bookmarkInfo" onclick="resumeBookmark()">
+      📖 Resume: <span id="bookmarkText"></span>
+    </div>
+
     <div class="novel-card">
       <h2>Weakest Beast Tamer Gets All SSS Dragons</h2>
       <p>by Dagzo · Fantasy · 908+ Chapters · Ongoing</p>
@@ -590,29 +613,21 @@
           min="1"
           max="999"
         />
-        <button
-          class="btn-fetch"
-          id="fetchBtn"
-          onclick="fetchChapter()"
-        >
+        <button class="btn-fetch" id="fetchBtn" onclick="fetchChapter()">
           ▶ &nbsp; Load Chapter
         </button>
       </div>
     </div>
 
-    <div class="loading-msg" id="loadingMsg">
-      ⟳ &nbsp; Fetching chapter from server...
-    </div>
-
+    <div class="loading-msg" id="loadingMsg">⟳ &nbsp; Fetching chapter...</div>
     <div class="error-msg" id="errorMsg"></div>
 
-    <!-- Voice settings -->
     <div class="settings-card">
       <div class="settings-title">Voice Settings</div>
 
       <div class="setting-row">
         <span class="setting-label">Voice</span>
-        <select class="voice-pick" id="voicePick">
+        <select class="voice-pick" id="voicePick" onchange="saveVoicePreference()">
           <option value="">Loading...</option>
         </select>
       </div>
@@ -634,81 +649,81 @@
           <button class="opt-btn" id="pauseOff" onclick="setPauses(false)">Off</button>
         </div>
       </div>
-
     </div>
 
   </div>
 
   <!-- PLAYER SCREEN -->
   <div class="player-screen" id="playerScreen">
+    <div class="player-layout">
 
-    <button class="btn-back-home" onclick="goHome()">
-      ← Back to Chapters
-    </button>
+      <!-- FIXED TOP SECTION -->
+      <div class="player-top">
 
-    <div class="chapter-hero">
-      <div class="ep-label">Now Playing</div>
-      <h2 id="chapterTitle">Chapter</h2>
-      <p id="chapterMeta"></p>
-    </div>
+        <button class="btn-back-home" onclick="goHome()">← Back to Chapters</button>
 
-    <div class="progress-wrap">
-      <div class="progress-bar-bg" onclick="seekByClick(event)">
-        <div class="progress-bar-fill" id="progressFill"></div>
+        <div class="chapter-hero">
+          <div class="ep-label">Now Playing</div>
+          <h2 id="chapterTitle">Chapter</h2>
+          <p id="chapterMeta"></p>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-bar-bg" id="progressBar" onclick="seekByClick(event)">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="progCurrent">Para 1</span>
+            <span id="progTotal">of 0</span>
+          </div>
+        </div>
+
+        <div class="caption-box">
+          <div class="caption-label">Reading</div>
+          <div class="caption-text" id="captionText">
+            Press play to begin...
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="ctrl-btn" onclick="skipBack()">⏮<br><span style="font-size:10px">Back</span></button>
+          <button class="ctrl-btn primary" id="playBtn" onclick="togglePlay()">▶</button>
+          <button class="ctrl-btn" onclick="skipForward()">⏭<br><span style="font-size:10px">Next</span></button>
+        </div>
+
+        <div class="speed-row">
+          <span>Speed</span>
+          <div class="speed-btns">
+            <button class="spd-btn" onclick="setSpeed(0.8)">0.8×</button>
+            <button class="spd-btn on" onclick="setSpeed(1.0)">1×</button>
+            <button class="spd-btn" onclick="setSpeed(1.15)">1.15×</button>
+            <button class="spd-btn" onclick="setSpeed(1.3)">1.3×</button>
+          </div>
+        </div>
+
+        <div class="auto-row" onclick="toggleAutoAdvance()">
+          <div>
+            <p>Auto-advance chapters</p>
+            <span>Loads next chapter automatically</span>
+          </div>
+          <div class="toggle" id="autoToggle">
+            <div class="toggle-dot"></div>
+          </div>
+        </div>
+
+        <div class="player-status" id="playerStatus">Ready</div>
+
       </div>
-      <div class="progress-text">
-        <span id="progCurrent">Para 1</span>
-        <span id="progTotal">of 0</span>
+
+      <!-- SCROLLABLE PARAGRAPH LIST -->
+      <div class="player-bottom">
+        <div class="para-list">
+          <div class="para-list-hdr">Chapter Paragraphs</div>
+          <div id="paraList"></div>
+        </div>
       </div>
+
     </div>
-
-    <div class="caption-box">
-      <div class="caption-label">Reading</div>
-      <div class="caption-text" id="captionText">
-        Press play to begin...
-        <span class="caption-cursor"></span>
-      </div>
-    </div>
-
-    <div class="controls">
-      <button class="ctrl-btn" onclick="skipBack()">
-        ⏮<br><span style="font-size:10px">Back</span>
-      </button>
-      <button class="ctrl-btn primary" id="playBtn" onclick="togglePlay()">
-        ▶
-      </button>
-      <button class="ctrl-btn" onclick="skipForward()">
-        ⏭<br><span style="font-size:10px">Next</span>
-      </button>
-    </div>
-
-    <div class="speed-row">
-      <span>Speed</span>
-      <div class="speed-btns">
-        <button class="spd-btn" onclick="setSpeed(0.8)">0.8×</button>
-        <button class="spd-btn on" onclick="setSpeed(1.0)">1×</button>
-        <button class="spd-btn" onclick="setSpeed(1.15)">1.15×</button>
-        <button class="spd-btn" onclick="setSpeed(1.3)">1.3×</button>
-      </div>
-    </div>
-
-    <div class="auto-row" onclick="toggleAutoAdvance()">
-      <div class="auto-row-left">
-        <p>Auto-advance chapters</p>
-        <span>Loads next chapter automatically</span>
-      </div>
-      <div class="toggle" id="autoToggle">
-        <div class="toggle-dot"></div>
-      </div>
-    </div>
-
-    <div class="player-status" id="playerStatus">Ready</div>
-
-    <div class="para-list">
-      <div class="para-list-hdr">Chapter Paragraphs</div>
-      <div id="paraList"></div>
-    </div>
-
   </div>
 
 </div>
@@ -724,25 +739,43 @@ let dramaticPauses = true;
 let autoAdvance = true;
 let currentChapter = 363;
 let voices = [];
-let serverIP = 'sovereignstoryforge.onrender.com';
+let deferredPrompt = null;
+let wordSpans = [];
+let currentWordIndex = 0;
+let wordBoundarySupported = false;
+
+// ── PWA INSTALL ───────────────────────────────────
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+
+async function installApp() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const result = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('installBanner').style.display = 'none';
+}
 
 // ── SERVER ────────────────────────────────────────
 function getServerURL() {
   const input = document.getElementById('serverIP').value.trim();
-  return input ? `https://${input}` : `https://sovereignstoryforge.devenrabadiya.workers.dev`;
+  return input
+    ? `https://${input}`
+    : `https://sovereignstoryforge.devenrabadiya.workers.dev`;
 }
 
 async function checkServer() {
   const dot = document.getElementById('statusDot');
   const txt = document.getElementById('statusText');
   const sub = document.getElementById('statusSub');
-  
   dot.className = 'status-dot';
   txt.textContent = 'Checking...';
-  
   try {
     const res = await fetch(`${getServerURL()}/ping`, {
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(8000)
     });
     const data = await res.json();
     dot.className = 'status-dot online';
@@ -751,7 +784,7 @@ async function checkServer() {
   } catch(e) {
     dot.className = 'status-dot offline';
     txt.textContent = 'Server offline';
-    sub.textContent = 'Start server.py on your laptop';
+    sub.textContent = 'Check your connection';
   }
 }
 
@@ -760,13 +793,11 @@ function loadVoices() {
   voices = speechSynthesis.getVoices();
   const select = document.getElementById('voicePick');
   select.innerHTML = '';
-  
   const eng = voices.filter(v => v.lang.startsWith('en'));
   if (!eng.length) {
     select.innerHTML = '<option>No voices found</option>';
     return;
   }
-  
   eng.forEach((v, i) => {
     const opt = document.createElement('option');
     opt.value = i;
@@ -777,59 +808,123 @@ function loadVoices() {
     opt.textContent = (isGood ? '⭐ ' : '') + v.name;
     select.appendChild(opt);
   });
-  
-  // Auto select best
-  const best = eng.findIndex(v =>
-    v.name.includes('Natural') ||
-    v.name.includes('Neural') ||
-    v.name.includes('Enhanced') ||
-    v.name.includes('Guy') ||
-    v.name.includes('Ryan')
-  );
-  select.selectedIndex = best >= 0 ? best : 0;
+
+  // Restore saved voice preference
+  const saved = localStorage.getItem('sovforge_voice');
+  if (saved) {
+    const idx = eng.findIndex(v => v.name === saved);
+    if (idx >= 0) select.selectedIndex = idx;
+  } else {
+    const best = eng.findIndex(v =>
+      v.name.includes('Natural') || v.name.includes('Neural') ||
+      v.name.includes('Guy') || v.name.includes('Ryan')
+    );
+    select.selectedIndex = best >= 0 ? best : 0;
+  }
+}
+
+function saveVoicePreference() {
+  const select = document.getElementById('voicePick');
+  const eng = voices.filter(v => v.lang.startsWith('en'));
+  if (eng[select.selectedIndex]) {
+    localStorage.setItem('sovforge_voice', eng[select.selectedIndex].name);
+  }
 }
 
 speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
-// ── FETCH CHAPTER ─────────────────────────────────
-async function fetchChapter() {
-  const num = parseInt(
-    document.getElementById('chapterNum').value
-  );
+// ── BOOKMARK ──────────────────────────────────────
+function saveBookmark(chapter, paraIndex) {
+  localStorage.setItem('sovforge_bookmark', JSON.stringify({
+    chapter, paraIndex, time: Date.now()
+  }));
+}
+
+function loadBookmark() {
+  const saved = localStorage.getItem('sovforge_bookmark');
+  if (!saved) return null;
+  return JSON.parse(saved);
+}
+
+function checkBookmark() {
+  const bm = loadBookmark();
+  if (!bm) return;
+  const info = document.getElementById('bookmarkInfo');
+  const text = document.getElementById('bookmarkText');
+  info.style.display = 'block';
+  text.textContent = `Chapter ${bm.chapter}, paragraph ${bm.paraIndex + 1}`;
+  document.getElementById('chapterNum').value = bm.chapter;
+}
+
+async function resumeBookmark() {
+  const bm = loadBookmark();
+  if (!bm) return;
+  document.getElementById('chapterNum').value = bm.chapter;
+  await fetchChapter(bm.paraIndex);
+}
+
+// ── NOISE FILTER ──────────────────────────────────
+const NOISE = [
+  /use\s*(wasd|arrow\s*keys)/i,
+  /prev(ious)?\s*chapter/i,
+  /next\s*chapter/i,
+  /chapter\s*list/i,
+  /turn\s*off\s*light/i,
+  /bookmark/i,
+  /font\s*size/i,
+  /reading\s*mode/i,
+  /freewebnovel/i,
+  /novel\s*live/i,
+  /read.*online.*free/i,
+  /thank\s*you\s*for\s*(reading|visiting)/i,
+  /please\s*(support|visit|follow)/i,
+  /don't\s*forget/i,
+  /leave\s*a\s*(comment|review)/i,
+  /advertisement/i,
+  /copyright/i,
+  /discord/i,
+  /patreon/i,
+  /subscribe/i,
+  /report\s*(error|mistake)/i,
+  /share\s*(this|novel)/i,
+  /^\s*[a-z]\s*$/i,
+  /^\d+$/,
+];
+
+function isNoise(text) {
+  return NOISE.some(p => p.test(text));
+}
+
+// ── FETCH ─────────────────────────────────────────
+async function fetchChapter(resumeAt = 0) {
+  const num = parseInt(document.getElementById('chapterNum').value);
   if (!num || num < 1) return;
-  
+
   const btn = document.getElementById('fetchBtn');
   const loading = document.getElementById('loadingMsg');
   const errMsg = document.getElementById('errorMsg');
-  
+
   btn.disabled = true;
   loading.style.display = 'block';
   errMsg.style.display = 'none';
-  
+
   try {
-    const res = await fetch(
-      `${getServerURL()}/chapter/${num}`,
-      { signal: AbortSignal.timeout(20000) }
-    );
-    
+    const res = await fetch(`${getServerURL()}/chapter/${num}`, {
+      signal: AbortSignal.timeout(25000)
+    });
     if (!res.ok) throw new Error('Chapter not found');
-    
     const data = await res.json();
-    
     if (!data.paragraphs || !data.paragraphs.length) {
-      throw new Error('No content found in chapter');
+      throw new Error('No content found');
     }
-    
-    // Load into player
-    loadChapter(data, num);
-    
+
+    // Filter noise from paragraphs
+    data.paragraphs = data.paragraphs.filter(p => !isNoise(p));
+
+    loadChapter(data, num, resumeAt);
   } catch(e) {
-    errMsg.textContent = '⚠ ' + (
-      e.message.includes('fetch') 
-        ? 'Cannot reach server. Make sure server.py is running on your laptop and enter the correct IP.'
-        : e.message
-    );
+    errMsg.textContent = '⚠ ' + e.message;
     errMsg.style.display = 'block';
   } finally {
     btn.disabled = false;
@@ -838,43 +933,67 @@ async function fetchChapter() {
 }
 
 // ── LOAD CHAPTER ──────────────────────────────────
-function loadChapter(data, chapterNum) {
+function loadChapter(data, chapterNum, resumeAt = 0) {
   paragraphs = data.paragraphs;
   currentChapter = chapterNum;
-  currentIndex = 0;
+  currentIndex = resumeAt;
   isPlaying = false;
   isPaused = false;
   speechSynthesis.cancel();
-  
-  document.getElementById('chapterTitle').textContent =
-    data.title;
+
+  document.getElementById('chapterTitle').textContent = data.title;
   document.getElementById('chapterMeta').textContent =
     `Chapter ${chapterNum} · ${paragraphs.length} paragraphs`;
-  
+
   renderParaList();
   updateProgress();
-  
-  document.getElementById('captionText').innerHTML =
-    paragraphs[0] +
-    '<span class="caption-cursor"></span>';
-  
+  showCaption(resumeAt);
+
   document.getElementById('playBtn').textContent = '▶';
   setPlayerStatus('', 'Ready — press play');
-  
-  // Switch to player
+
   document.getElementById('homeScreen').style.display = 'none';
   document.getElementById('playerScreen').style.display = 'block';
 }
 
+// ── WORD HIGHLIGHTING ─────────────────────────────
+function showCaption(index) {
+  const caption = document.getElementById('captionText');
+  if (index >= paragraphs.length) return;
+  const text = paragraphs[index];
+  const words = text.split(' ');
+  caption.innerHTML = words.map((w, i) =>
+    `<span class="word" id="w${i}">${w} </span>`
+  ).join('');
+  wordSpans = words.map((_, i) => document.getElementById(`w${i}`));
+  currentWordIndex = 0;
+}
+
+function highlightWord(charIndex) {
+  // Clear previous
+  wordSpans.forEach(s => { if(s) s.classList.remove('active'); });
+  // Find word at charIndex
+  const caption = document.getElementById('captionText');
+  const text = paragraphs[currentIndex] || '';
+  let count = 0;
+  const words = text.split(' ');
+  for (let i = 0; i < words.length; i++) {
+    count += words[i].length + 1;
+    if (count > charIndex) {
+      if (wordSpans[i]) wordSpans[i].classList.add('active');
+      currentWordIndex = i;
+      break;
+    }
+  }
+}
+
 // ── READING ───────────────────────────────────────
 function analyseText(text) {
-  const isAction = /slammed|roared|charged|exploded|attacked|struck|battle|fight|kill|death|power|rage|fury|dragon|beast/i.test(text);
+  const isAction = /slammed|roared|charged|exploded|attacked|struck|battle|fight|kill|power|rage|fury|dragon|beast/i.test(text);
   const isEmotional = /tears|heart|whispered|silent|alone|fear|hope|dream|love|lost|pain|grief/i.test(text);
-  const isCliffhanger = text.endsWith('...') || text.endsWith('?!') || text.endsWith('!');
-  const isDialogue = text.startsWith('"') || text.startsWith('"');
-  const isLong = text.length > 250;
-  
-  return { isAction, isEmotional, isCliffhanger, isDialogue, isLong };
+  const isCliffhanger = text.endsWith('...') || text.endsWith('?!');
+  const isDialogue = text.startsWith('"') || text.startsWith('\u201c');
+  return { isAction, isEmotional, isCliffhanger, isDialogue };
 }
 
 function readParagraph(index) {
@@ -882,109 +1001,92 @@ function readParagraph(index) {
     onChapterEnd();
     return;
   }
-  
+
   currentIndex = index;
   const text = paragraphs[index];
   const mood = analyseText(text);
-  
-  // Update caption
-  const caption = document.getElementById('captionText');
-  caption.classList.add('fading');
-  setTimeout(() => {
-    caption.innerHTML = text +
-      '<span class="caption-cursor"></span>';
-    caption.classList.remove('fading');
-  }, 200);
-  
+
+  showCaption(index);
   updateParaList();
   updateProgress();
-  
-  // Build utterance
+  saveBookmark(currentChapter, index);
+
   const utt = new SpeechSynthesisUtterance(text);
-  
-  // Speed adjustments based on mood
+
+  // Subtle mood adjustments — small variations only
   if (mood.isAction) {
-    utt.rate = readingSpeed * 1.08;
-    utt.pitch = 0.95;
+    utt.rate = readingSpeed * 1.05;
+    utt.pitch = 0.97;
   } else if (mood.isEmotional) {
-    utt.rate = readingSpeed * 0.9;
-    utt.pitch = 1.05;
-  } else if (mood.isCliffhanger) {
-    utt.rate = readingSpeed * 0.88;
-    utt.pitch = 1.0;
-  } else if (mood.isDialogue) {
     utt.rate = readingSpeed * 0.95;
-    utt.pitch = 1.05;
+    utt.pitch = 1.02;
+  } else if (mood.isCliffhanger) {
+    utt.rate = readingSpeed * 0.93;
+    utt.pitch = 1.0;
   } else {
     utt.rate = readingSpeed;
     utt.pitch = 1.0;
   }
-  
+
   utt.volume = 1.0;
-  
+
   // Set voice
   const eng = voices.filter(v => v.lang.startsWith('en'));
   const sel = document.getElementById('voicePick');
-  if (eng[sel.selectedIndex]) {
-    utt.voice = eng[sel.selectedIndex];
-  }
-  
+  if (eng[sel.selectedIndex]) utt.voice = eng[sel.selectedIndex];
+
+  // Word boundary highlighting
+  utt.onboundary = (event) => {
+    if (event.name === 'word') {
+      highlightWord(event.charIndex);
+    }
+  };
+
   utt.onend = () => {
     if (!isPlaying || isPaused) return;
-    
-    // Pause duration based on mood
-    let pause = 350;
+    let pause = 300;
     if (dramaticPauses) {
       if (mood.isCliffhanger) pause = 1200;
-      else if (mood.isEmotional) pause = 800;
-      else if (mood.isAction) pause = 200;
-      else if (mood.isLong) pause = 600;
+      else if (mood.isEmotional) pause = 700;
+      else if (mood.isAction) pause = 150;
     }
-    
     setTimeout(() => {
-      if (isPlaying && !isPaused) {
-        readParagraph(currentIndex + 1);
-      }
+      if (isPlaying && !isPaused) readParagraph(currentIndex + 1);
     }, pause);
   };
-  
+
   utt.onerror = () => {
-    if (isPlaying && !isPaused) {
-      readParagraph(currentIndex + 1);
-    }
+    if (isPlaying && !isPaused) readParagraph(currentIndex + 1);
   };
-  
+
   speechSynthesis.speak(utt);
-  
+
   const moodLabel = mood.isAction ? '⚔ Action' :
-    mood.isEmotional ? '💙 Emotional' :
+    mood.isEmotional ? '💛 Emotional' :
     mood.isCliffhanger ? '⚡ Intense' :
     mood.isDialogue ? '💬 Dialogue' : '📖 Narration';
-  
+
   setPlayerStatus('playing', moodLabel);
 }
 
 async function onChapterEnd() {
   isPlaying = false;
   document.getElementById('playBtn').textContent = '▶';
-  
+
   if (autoAdvance) {
-    setPlayerStatus('loading',
-      `Loading Chapter ${currentChapter + 1}...`
-    );
+    setPlayerStatus('loading', `Loading Chapter ${currentChapter + 1}...`);
     document.getElementById('captionText').innerHTML =
-      `⟳ Loading Chapter ${currentChapter + 1}...` +
-      '<span class="caption-cursor"></span>';
-    
+      `⟳ Loading Chapter ${currentChapter + 1}...`;
     try {
       const res = await fetch(
         `${getServerURL()}/chapter/${currentChapter + 1}`,
-        { signal: AbortSignal.timeout(20000) }
+        { signal: AbortSignal.timeout(25000) }
       );
       const data = await res.json();
       if (data.paragraphs && data.paragraphs.length) {
+        data.paragraphs = data.paragraphs.filter(p => !isNoise(p));
+        document.getElementById('chapterNum').value = currentChapter + 1;
         loadChapter(data, currentChapter + 1);
-        // Auto start next chapter
         setTimeout(() => {
           isPlaying = true;
           document.getElementById('playBtn').textContent = '⏸';
@@ -994,26 +1096,23 @@ async function onChapterEnd() {
     } catch(e) {
       setPlayerStatus('done', 'Chapter complete');
       document.getElementById('captionText').innerHTML =
-        '✓ Chapter complete — auto-advance failed, load next manually';
+        '✓ Chapter complete';
     }
   } else {
     setPlayerStatus('done', 'Chapter complete');
-    document.getElementById('captionText').innerHTML =
-      '✓ Chapter complete';
+    document.getElementById('captionText').innerHTML = '✓ Chapter complete';
   }
 }
 
 // ── CONTROLS ──────────────────────────────────────
 function togglePlay() {
   if (!paragraphs.length) return;
-  
   if (!isPlaying) {
     isPlaying = true;
     isPaused = false;
     document.getElementById('playBtn').textContent = '⏸';
     if (speechSynthesis.paused) {
       speechSynthesis.resume();
-      setPlayerStatus('playing', 'Playing');
     } else {
       readParagraph(currentIndex);
     }
@@ -1036,11 +1135,9 @@ function skipForward() {
     if (isPlaying) readParagraph(currentIndex + 1);
     else {
       currentIndex++;
+      showCaption(currentIndex);
       updateParaList();
       updateProgress();
-      document.getElementById('captionText').innerHTML =
-        paragraphs[currentIndex] +
-        '<span class="caption-cursor"></span>';
     }
   }
 }
@@ -1051,11 +1148,9 @@ function skipBack() {
     if (isPlaying) readParagraph(currentIndex - 1);
     else {
       currentIndex--;
+      showCaption(currentIndex);
       updateParaList();
       updateProgress();
-      document.getElementById('captionText').innerHTML =
-        paragraphs[currentIndex] +
-        '<span class="caption-cursor"></span>';
     }
   }
 }
@@ -1066,42 +1161,42 @@ function jumpTo(index) {
   if (isPlaying) {
     readParagraph(index);
   } else {
+    showCaption(index);
     updateParaList();
     updateProgress();
-    document.getElementById('captionText').innerHTML =
-      paragraphs[index] +
-      '<span class="caption-cursor"></span>';
   }
 }
 
 function seekByClick(e) {
   const bar = e.currentTarget;
-  const pct = e.offsetX / bar.offsetWidth;
+  const rect = bar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
   const target = Math.floor(pct * paragraphs.length);
   jumpTo(Math.max(0, Math.min(target, paragraphs.length - 1)));
 }
 
 function setSpeed(s) {
   readingSpeed = s;
-  document.querySelectorAll('.opt-btn, .spd-btn')
-    .forEach(b => {
-      if (b.textContent === s + '×') b.classList.add('selected', 'on');
-      else { b.classList.remove('selected'); b.classList.remove('on'); }
-    });
+  document.querySelectorAll('.opt-btn, .spd-btn').forEach(b => {
+    if (b.textContent === s + '×') {
+      b.classList.add('selected', 'on');
+    } else {
+      b.classList.remove('selected', 'on');
+    }
+  });
+  localStorage.setItem('sovforge_speed', s);
 }
 
 function setPauses(on) {
   dramaticPauses = on;
-  document.getElementById('pauseOn').className =
-    'opt-btn' + (on ? ' selected' : '');
-  document.getElementById('pauseOff').className =
-    'opt-btn' + (!on ? ' selected' : '');
+  document.getElementById('pauseOn').className = 'opt-btn' + (on ? ' selected' : '');
+  document.getElementById('pauseOff').className = 'opt-btn' + (!on ? ' selected' : '');
 }
 
 function toggleAutoAdvance() {
   autoAdvance = !autoAdvance;
-  const t = document.getElementById('autoToggle');
-  t.className = 'toggle' + (autoAdvance ? ' on' : '');
+  document.getElementById('autoToggle').className =
+    'toggle' + (autoAdvance ? ' on' : '');
 }
 
 // ── UI HELPERS ────────────────────────────────────
@@ -1114,8 +1209,7 @@ function renderParaList() {
       (i === currentIndex ? ' current' : '') +
       (i < currentIndex ? ' done' : '');
     div.id = `p${i}`;
-    div.textContent = p.substring(0, 90) +
-      (p.length > 90 ? '...' : '');
+    div.textContent = p.substring(0, 80) + (p.length > 80 ? '...' : '');
     div.onclick = () => jumpTo(i);
     list.appendChild(div);
   });
@@ -1137,10 +1231,8 @@ function updateProgress() {
   const pct = paragraphs.length
     ? (currentIndex / paragraphs.length) * 100 : 0;
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progCurrent').textContent =
-    `Para ${currentIndex + 1}`;
-  document.getElementById('progTotal').textContent =
-    `of ${paragraphs.length}`;
+  document.getElementById('progCurrent').textContent = `Para ${currentIndex + 1}`;
+  document.getElementById('progTotal').textContent = `of ${paragraphs.length}`;
 }
 
 function setPlayerStatus(type, text) {
@@ -1156,10 +1248,19 @@ function goHome() {
   document.getElementById('playBtn').textContent = '▶';
   document.getElementById('homeScreen').style.display = 'block';
   document.getElementById('playerScreen').style.display = 'none';
+  checkBookmark();
+}
+
+// ── RESTORE PREFERENCES ───────────────────────────
+function restorePreferences() {
+  const speed = localStorage.getItem('sovforge_speed');
+  if (speed) setSpeed(parseFloat(speed));
 }
 
 // ── INIT ──────────────────────────────────────────
 checkServer();
+checkBookmark();
+restorePreferences();
 </script>
 
 </body>
