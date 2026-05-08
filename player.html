@@ -338,11 +338,12 @@
     color: #c8b890;
   }
 
-  .word.active {
-    background: #3a2a10;
-    color: #f0d080;
-    border-radius: 3px;
-    padding: 0 2px;
+  .audio-loading {
+    text-align: center;
+    font-size: 12px;
+    color: #c9a84c;
+    padding: 8px;
+    display: none;
   }
 
   .controls {
@@ -370,6 +371,11 @@
     color: #12100e;
     font-size: 22px;
     font-weight: bold;
+  }
+
+  .ctrl-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .speed-row {
@@ -550,23 +556,20 @@
       <div class="setting-row">
         <span class="setting-label">Voice</span>
         <select class="voice-pick" id="voicePick" onchange="saveVoicePreference()">
-          <option value="">Loading...</option>
+          <option value="en-US-GuyNeural">⭐ Guy (Male)</option>
+          <option value="en-US-AriaNeural">Aria (Female)</option>
+          <option value="en-GB-RyanNeural">Ryan (Male UK)</option>
+          <option value="en-AU-WilliamNeural">William (Male AU)</option>
+          <option value="en-US-JennyNeural">Jenny (Female US)</option>
         </select>
       </div>
       <div class="setting-row">
         <span class="setting-label">Speed</span>
-        <div class="setting-control" id="speedBtnsHome">
+        <div class="setting-control">
           <button class="opt-btn" onclick="setSpeed(0.8)">0.8×</button>
-          <button class="opt-btn selected" onclick="setSpeed(1.0)">1×</button>
+          <button class="opt-btn selected" id="speed1" onclick="setSpeed(1.0)">1×</button>
           <button class="opt-btn" onclick="setSpeed(1.15)">1.15×</button>
           <button class="opt-btn" onclick="setSpeed(1.3)">1.3×</button>
-        </div>
-      </div>
-      <div class="setting-row">
-        <span class="setting-label">Dramatic pauses</span>
-        <div class="setting-control">
-          <button class="opt-btn selected" id="pauseOn" onclick="setPauses(true)">On</button>
-          <button class="opt-btn" id="pauseOff" onclick="setPauses(false)">Off</button>
         </div>
       </div>
     </div>
@@ -597,17 +600,25 @@
     <div class="caption-box">
       <div class="caption-label">Reading</div>
       <div class="caption-text" id="captionText">Press play to begin...</div>
+      <div class="audio-loading" id="audioLoading">⟳ Generating audio...</div>
     </div>
 
+    <!-- Hidden audio element -->
+    <audio id="audioPlayer" preload="auto"></audio>
+
     <div class="controls">
-      <button class="ctrl-btn" onclick="skipBack()">⏮<br><span style="font-size:10px">Back</span></button>
+      <button class="ctrl-btn" id="backBtn" onclick="skipBack()">
+        ⏮<br><span style="font-size:10px">Back</span>
+      </button>
       <button class="ctrl-btn primary" id="playBtn" onclick="togglePlay()">▶</button>
-      <button class="ctrl-btn" onclick="skipForward()">⏭<br><span style="font-size:10px">Next</span></button>
+      <button class="ctrl-btn" id="nextBtn" onclick="skipForward()">
+        ⏭<br><span style="font-size:10px">Next</span>
+      </button>
     </div>
 
     <div class="speed-row">
       <span>Speed</span>
-      <div class="speed-btns" id="speedBtnsPlayer">
+      <div class="speed-btns">
         <button class="spd-btn" onclick="setSpeed(0.8)">0.8×</button>
         <button class="spd-btn on" onclick="setSpeed(1.0)">1×</button>
         <button class="spd-btn" onclick="setSpeed(1.15)">1.15×</button>
@@ -620,7 +631,7 @@
         <p>Auto-advance chapters</p>
         <span>Loads next chapter automatically</span>
       </div>
-      <div class="toggle" id="autoToggle">
+      <div class="toggle on" id="autoToggle">
         <div class="toggle-dot"></div>
       </div>
     </div>
@@ -641,20 +652,19 @@
 let paragraphs = [];
 let currentIndex = 0;
 let isPlaying = false;
-let isPaused = false;
-let readingSpeed = 1.0;
-let dramaticPauses = true;
-let autoAdvance = true;
 let currentChapter = 363;
-let voices = [];
-let wordSpans = [];
+let readingSpeed = 1.0;
+let autoAdvance = true;
+let isLoadingAudio = false;
+
+const audio = document.getElementById('audioPlayer');
 
 // ── SERVER ────────────────────────────────────────
 function getServerURL() {
   const input = document.getElementById('serverIP').value.trim();
   return input
     ? `https://${input}`
-    : `https://sovereignstoryforge.devenrabadiya.workers.dev`;
+    : `https://sovereignstoryforge.onrender.com`;
 }
 
 async function checkServer() {
@@ -678,50 +688,23 @@ async function checkServer() {
   }
 }
 
-// ── VOICES ───────────────────────────────────────
-function loadVoices() {
-  voices = speechSynthesis.getVoices();
-  const select = document.getElementById('voicePick');
-  if (!select) return;
-  select.innerHTML = '';
-  const eng = voices.filter(v => v.lang.startsWith('en'));
-  if (!eng.length) {
-    select.innerHTML = '<option>No voices found</option>';
-    return;
-  }
-  eng.forEach((v, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    const isGood = v.name.includes('Natural') ||
-      v.name.includes('Neural') ||
-      v.name.includes('Enhanced') ||
-      v.name.includes('Premium');
-    opt.textContent = (isGood ? '⭐ ' : '') + v.name;
-    select.appendChild(opt);
-  });
-  const saved = localStorage.getItem('sovforge_voice');
-  if (saved) {
-    const idx = eng.findIndex(v => v.name === saved);
-    if (idx >= 0) select.selectedIndex = idx;
-  } else {
-    const best = eng.findIndex(v =>
-      v.name.includes('Natural') || v.name.includes('Neural') ||
-      v.name.includes('Guy') || v.name.includes('Ryan')
-    );
-    select.selectedIndex = best >= 0 ? best : 0;
-  }
+// ── VOICE ─────────────────────────────────────────
+function getSelectedVoice() {
+  const sel = document.getElementById('voicePick');
+  return sel ? sel.value : 'en-US-GuyNeural';
 }
 
 function saveVoicePreference() {
-  const select = document.getElementById('voicePick');
-  const eng = voices.filter(v => v.lang.startsWith('en'));
-  if (select && eng[select.selectedIndex]) {
-    localStorage.setItem('sovforge_voice', eng[select.selectedIndex].name);
-  }
+  localStorage.setItem('sovforge_voice', getSelectedVoice());
 }
 
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
+function restoreVoicePreference() {
+  const saved = localStorage.getItem('sovforge_voice');
+  if (saved) {
+    const sel = document.getElementById('voicePick');
+    if (sel) sel.value = saved;
+  }
+}
 
 // ── BOOKMARK ──────────────────────────────────────
 function saveBookmark(chapter, paraIndex) {
@@ -767,23 +750,16 @@ const NOISE = [
   /prev(ious)?\s*chapter/i,
   /next\s*chapter/i,
   /chapter\s*list/i,
-  /turn\s*off\s*light/i,
-  /font\s*size/i,
-  /reading\s*mode/i,
   /freewebnovel/i,
   /novel\s*live/i,
   /read.*online.*free/i,
   /thank\s*you\s*for\s*(reading|visiting)/i,
   /please\s*(support|visit|follow)/i,
-  /don't\s*forget/i,
-  /leave\s*a\s*(comment|review)/i,
   /advertisement/i,
   /copyright/i,
   /discord/i,
   /patreon/i,
   /subscribe/i,
-  /report\s*(error|mistake)/i,
-  /share\s*(this|novel)/i,
   /^\s*[a-z]\s*$/i,
   /^\d+$/,
 ];
@@ -792,7 +768,7 @@ function isNoise(text) {
   return NOISE.some(p => p.test(text));
 }
 
-// ── FETCH ─────────────────────────────────────────
+// ── FETCH CHAPTER ─────────────────────────────────
 async function fetchChapter(resumeAt = 0) {
   const num = parseInt(document.getElementById('chapterNum').value);
   if (!num || num < 1) return;
@@ -833,8 +809,8 @@ function loadChapter(data, chapterNum, resumeAt = 0) {
   currentChapter = chapterNum;
   currentIndex = resumeAt;
   isPlaying = false;
-  isPaused = false;
-  speechSynthesis.cancel();
+  audio.pause();
+  audio.src = '';
 
   document.getElementById('chapterTitle').textContent = data.title;
   document.getElementById('chapterMeta').textContent =
@@ -844,125 +820,93 @@ function loadChapter(data, chapterNum, resumeAt = 0) {
   updateProgress();
   showCaption(resumeAt);
 
-  document.getElementById('playBtn').textContent = '▶';
+  const pb = document.getElementById('playBtn');
+  if (pb) pb.textContent = '▶';
   setPlayerStatus('', 'Ready — press play');
 
   document.getElementById('homeScreen').style.display = 'none';
   document.getElementById('playerScreen').style.display = 'block';
 }
 
-// ── WORD HIGHLIGHTING ─────────────────────────────
+// ── CAPTION ───────────────────────────────────────
 function showCaption(index) {
   const caption = document.getElementById('captionText');
   if (!caption || index >= paragraphs.length) return;
-  const text = paragraphs[index];
-  const words = text.split(' ');
-  caption.innerHTML = words.map((w, i) =>
-    `<span class="word" id="w${i}">${w} </span>`
-  ).join('');
-  wordSpans = words.map((_, i) => document.getElementById(`w${i}`));
+  caption.textContent = paragraphs[index];
 }
 
-function highlightWord(charIndex) {
-  wordSpans.forEach(s => { if(s) s.classList.remove('active'); });
-  const text = paragraphs[currentIndex] || '';
-  const words = text.split(' ');
-  let count = 0;
-  for (let i = 0; i < words.length; i++) {
-    count += words[i].length + 1;
-    if (count > charIndex) {
-      if (wordSpans[i]) wordSpans[i].classList.add('active');
-      break;
-    }
-  }
-}
-
-// ── READING ───────────────────────────────────────
-function analyseText(text) {
-  const isAction = /slammed|roared|charged|exploded|attacked|struck|battle|fight|kill|power|rage|fury|dragon|beast/i.test(text);
-  const isEmotional = /tears|heart|whispered|silent|alone|fear|hope|dream|love|lost|pain|grief/i.test(text);
-  const isCliffhanger = text.endsWith('...') || text.endsWith('?!');
-  const isDialogue = text.startsWith('"') || text.startsWith('\u201c');
-  return { isAction, isEmotional, isCliffhanger, isDialogue };
-}
-
-function readParagraph(index) {
+// ── AUDIO PLAYBACK ────────────────────────────────
+async function playParagraph(index) {
   if (index >= paragraphs.length) {
     onChapterEnd();
     return;
   }
 
   currentIndex = index;
-  const text = paragraphs[index];
-  const mood = analyseText(text);
-
   showCaption(index);
   updateParaList();
   updateProgress();
   saveBookmark(currentChapter, index);
 
-  const utt = new SpeechSynthesisUtterance(text);
+  const text = paragraphs[index];
+  const voice = getSelectedVoice();
 
-  if (mood.isAction) {
-    utt.rate = readingSpeed * 1.05;
-    utt.pitch = 0.97;
-  } else if (mood.isEmotional) {
-    utt.rate = readingSpeed * 0.95;
-    utt.pitch = 1.02;
-  } else if (mood.isCliffhanger) {
-    utt.rate = readingSpeed * 0.93;
-    utt.pitch = 1.0;
-  } else {
-    utt.rate = readingSpeed;
-    utt.pitch = 1.0;
-  }
+  // Show loading
+  isLoadingAudio = true;
+  setPlayerStatus('loading', '⟳ Generating audio...');
+  const audioLoading = document.getElementById('audioLoading');
+  if (audioLoading) audioLoading.style.display = 'block';
 
-  utt.volume = 1.0;
+  try {
+    // Request TTS from server
+    const res = await fetch(`${getServerURL()}/speak`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voice }),
+      signal: AbortSignal.timeout(30000)
+    });
 
-  const eng = voices.filter(v => v.lang.startsWith('en'));
-  const sel = document.getElementById('voicePick');
-  if (sel && eng[sel.selectedIndex]) utt.voice = eng[sel.selectedIndex];
+    if (!res.ok) throw new Error('TTS failed');
 
-  utt.onboundary = (event) => {
-    if (event.name === 'word') highlightWord(event.charIndex);
-  };
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
 
-  utt.onend = () => {
-    if (!isPlaying || isPaused) return;
-    let pause = 300;
-    if (dramaticPauses) {
-      if (mood.isCliffhanger) pause = 1200;
-      else if (mood.isEmotional) pause = 700;
-      else if (mood.isAction) pause = 150;
+    if (!isPlaying) {
+      URL.revokeObjectURL(url);
+      return;
     }
-    setTimeout(() => {
-      if (isPlaying && !isPaused) readParagraph(currentIndex + 1);
-    }, pause);
-  };
 
-  utt.onerror = () => {
-    if (isPlaying && !isPaused) readParagraph(currentIndex + 1);
-  };
+    audio.src = url;
+    audio.playbackRate = readingSpeed;
+    await audio.play();
 
-  speechSynthesis.speak(utt);
+    if (audioLoading) audioLoading.style.display = 'none';
+    setPlayerStatus('playing', '📖 Playing');
+    isLoadingAudio = false;
 
-  const moodLabel = mood.isAction ? '⚔ Action' :
-    mood.isEmotional ? '💛 Emotional' :
-    mood.isCliffhanger ? '⚡ Intense' :
-    mood.isDialogue ? '💬 Dialogue' : '📖 Narration';
+    audio.onended = () => {
+      URL.revokeObjectURL(url);
+      if (isPlaying) {
+        setTimeout(() => playParagraph(currentIndex + 1), 300);
+      }
+    };
 
-  setPlayerStatus('playing', moodLabel);
+  } catch(e) {
+    isLoadingAudio = false;
+    if (audioLoading) audioLoading.style.display = 'none';
+    if (isPlaying) {
+      setTimeout(() => playParagraph(currentIndex + 1), 500);
+    }
+  }
 }
 
 async function onChapterEnd() {
   isPlaying = false;
-  const playBtn = document.getElementById('playBtn');
-  if (playBtn) playBtn.textContent = '▶';
+  const pb = document.getElementById('playBtn');
+  if (pb) pb.textContent = '▶';
 
   if (autoAdvance) {
     setPlayerStatus('loading', `Loading Chapter ${currentChapter + 1}...`);
-    const caption = document.getElementById('captionText');
-    if (caption) caption.innerHTML = `⟳ Loading Chapter ${currentChapter + 1}...`;
     try {
       const res = await fetch(
         `${getServerURL()}/chapter/${currentChapter + 1}`,
@@ -978,54 +922,46 @@ async function onChapterEnd() {
           isPlaying = true;
           const pb = document.getElementById('playBtn');
           if (pb) pb.textContent = '⏸';
-          readParagraph(0);
-        }, 1500);
+          playParagraph(0);
+        }, 1000);
       }
     } catch(e) {
-      setPlayerStatus('done', 'Chapter complete');
-      const caption = document.getElementById('captionText');
-      if (caption) caption.innerHTML = '✓ Chapter complete';
+      setPlayerStatus('done', '✓ Chapter complete');
     }
   } else {
-    setPlayerStatus('done', 'Chapter complete');
-    const caption = document.getElementById('captionText');
-    if (caption) caption.innerHTML = '✓ Chapter complete';
+    setPlayerStatus('done', '✓ Chapter complete');
   }
 }
 
 // ── CONTROLS ──────────────────────────────────────
 function togglePlay() {
   if (!paragraphs.length) return;
+
   if (!isPlaying) {
     isPlaying = true;
-    isPaused = false;
     const pb = document.getElementById('playBtn');
     if (pb) pb.textContent = '⏸';
-    if (speechSynthesis.paused) {
-      speechSynthesis.resume();
+    if (audio.src && audio.paused) {
+      audio.play();
+      setPlayerStatus('playing', '📖 Playing');
     } else {
-      readParagraph(currentIndex);
+      playParagraph(currentIndex);
     }
-  } else if (!isPaused) {
-    isPaused = true;
-    speechSynthesis.pause();
+  } else {
+    isPlaying = false;
+    audio.pause();
     const pb = document.getElementById('playBtn');
     if (pb) pb.textContent = '▶';
-    setPlayerStatus('paused', 'Paused');
-  } else {
-    isPaused = false;
-    speechSynthesis.resume();
-    const pb = document.getElementById('playBtn');
-    if (pb) pb.textContent = '⏸';
-    setPlayerStatus('playing', 'Playing');
+    setPlayerStatus('paused', `Paused at para ${currentIndex + 1}`);
   }
 }
 
 function skipForward() {
-  speechSynthesis.cancel();
   if (currentIndex < paragraphs.length - 1) {
-    if (isPlaying) readParagraph(currentIndex + 1);
-    else {
+    if (isPlaying) {
+      audio.pause();
+      playParagraph(currentIndex + 1);
+    } else {
       currentIndex++;
       showCaption(currentIndex);
       updateParaList();
@@ -1035,10 +971,11 @@ function skipForward() {
 }
 
 function skipBack() {
-  speechSynthesis.cancel();
   if (currentIndex > 0) {
-    if (isPlaying) readParagraph(currentIndex - 1);
-    else {
+    if (isPlaying) {
+      audio.pause();
+      playParagraph(currentIndex - 1);
+    } else {
       currentIndex--;
       showCaption(currentIndex);
       updateParaList();
@@ -1048,10 +985,10 @@ function skipBack() {
 }
 
 function jumpTo(index) {
-  speechSynthesis.cancel();
   currentIndex = index;
   if (isPlaying) {
-    readParagraph(index);
+    audio.pause();
+    playParagraph(index);
   } else {
     showCaption(index);
     updateParaList();
@@ -1069,6 +1006,7 @@ function seekByClick(e) {
 
 function setSpeed(s) {
   readingSpeed = s;
+  audio.playbackRate = s;
   document.querySelectorAll('.opt-btn').forEach(b => {
     if (b.textContent.trim() === s + '×') b.classList.add('selected');
     else b.classList.remove('selected');
@@ -1078,14 +1016,6 @@ function setSpeed(s) {
     else b.classList.remove('on');
   });
   localStorage.setItem('sovforge_speed', s);
-}
-
-function setPauses(on) {
-  dramaticPauses = on;
-  const pOn = document.getElementById('pauseOn');
-  const pOff = document.getElementById('pauseOff');
-  if (pOn) pOn.className = 'opt-btn' + (on ? ' selected' : '');
-  if (pOff) pOff.className = 'opt-btn' + (!on ? ' selected' : '');
 }
 
 function toggleAutoAdvance() {
@@ -1140,9 +1070,9 @@ function setPlayerStatus(type, text) {
 }
 
 function goHome() {
-  speechSynthesis.cancel();
   isPlaying = false;
-  isPaused = false;
+  audio.pause();
+  audio.src = '';
   const pb = document.getElementById('playBtn');
   if (pb) pb.textContent = '▶';
   document.getElementById('homeScreen').style.display = 'block';
@@ -1152,7 +1082,11 @@ function goHome() {
 
 // ── INIT ──────────────────────────────────────────
 checkServer();
+restoreVoicePreference();
 setTimeout(checkBookmark, 500);
+
+const savedSpeed = localStorage.getItem('sovforge_speed');
+if (savedSpeed) readingSpeed = parseFloat(savedSpeed);
 </script>
 
 </body>
