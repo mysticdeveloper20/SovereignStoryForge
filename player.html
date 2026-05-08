@@ -1174,7 +1174,7 @@ function seekByClick(e) {
 function setSpeed(s) {
   readingSpeed = s;
   document.querySelectorAll('.opt-btn, .spd-btn').forEach(b => {
-    if (b.textContent === s + '×') {
+    if (b.textContent.trim() === s + '×') {
       b.classList.add('selected', 'on');
     } else {
       b.classList.remove('selected', 'on');
@@ -1249,7 +1249,7 @@ function goHome() {
 // ── RESTORE PREFERENCES ───────────────────────────
 function restorePreferences() {
   const speed = localStorage.getItem('sovforge_speed');
-  if (speed) setSpeed(parseFloat(speed));
+  if (speed) readingSpeed = parseFloat(speed);
 }
  try { restorePreferences(); } catch(e) {}
 
