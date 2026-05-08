@@ -1,18 +1,23 @@
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, send_file, Response
 from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
 import re
 import os
+import asyncio
+import edge_tts
+import tempfile
 
 app = Flask(__name__)
 CORS(app)
 
 BASE_URL = "https://freewebnovel.com/weakest-beast-tamer-gets-all-sss-dragons"
 
+# Default voice — Guy Neural (male narrator)
+DEFAULT_VOICE = "en-US-GuyNeural"
+
 NOISE_PATTERNS = [
-    r'freewebnovel', r'novel\s*live', r'novellive',
-    r'read.*online.*free',
+    r'freewebnovel', r'novel\s*live', r'read.*online.*free',
     r'thank\s*you\s*for\s*(reading|visiting)',
     r'please\s*(support|visit|follow)',
     r'don\'t\s*forget\s*to',
@@ -22,6 +27,11 @@ NOISE_PATTERNS = [
     r'subscribe', r'report\s*(error|mistake)',
     r'share\s*(this|novel)',
     r'read\s*at', r'translator',
+    r'use\s*(wasd|arrow\s*keys)',
+    r'prev(ious)?\s*chapter',
+    r'next\s*chapter',
+    r'chapter\s*list',
+    r'^\d+$',
 ]
 
 def clean_text(text):
@@ -105,6 +115,17 @@ def fetch_chapter(chapter_num):
         return None, str(e)
 
 
+async def text_to_speech(text, voice=DEFAULT_VOICE):
+    """Convert text to MP3 using Edge TTS"""
+    tmp = tempfile.NamedTemporaryFile(
+        delete=False, suffix='.mp3'
+    )
+    tmp.close()
+    communicate = edge_tts.Communicate(text, voice)
+    await communicate.save(tmp.name)
+    return tmp.name
+
+
 @app.route('/')
 def serve_player():
     player_path = os.path.join(
@@ -114,12 +135,62 @@ def serve_player():
     return send_file(player_path)
 
 
+@app.route('/manifest.json')
+def serve_manifest():
+    manifest_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        'manifest.json'
+    )
+    return send_file(
+        manifest_path,
+        mimetype='application/manifest+json'
+    )
+
+
 @app.route('/chapter/<int:chapter_num>')
 def get_chapter(chapter_num):
     data, error = fetch_chapter(chapter_num)
     if error:
         return jsonify({'error': error}), 404
     return jsonify(data)
+
+
+@app.route('/speak', methods=['POST'])
+def speak():
+    """Convert paragraph text to MP3 audio"""
+    try:
+        body = request.get_json()
+        text = body.get('text', '')
+        voice = body.get('voice', DEFAULT_VOICE)
+        if not text:
+            return jsonify({'error': 'No text provided'}), 400
+        # Limit text length per request
+        text = text[:2000]
+        # Run async TTS
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        mp3_path = loop.run_until_complete(
+            text_to_speech(text, voice)
+        )
+        loop.close()
+        def generate():
+            with open(mp3_path, 'rb') as f:
+                data = f.read(4096)
+                while data:
+                    yield data
+                    data = f.read(4096)
+            os.unlink(mp3_path)
+        return Response(
+            generate(),
+            mimetype='audio/mpeg',
+            headers={
+                'Content-Disposition': 'inline',
+                'Cache-Control': 'no-cache',
+                'Access-Control-Allow-Origin': '*',
+            }
+        )
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/ping')
@@ -131,13 +202,6 @@ def ping():
 
 port = int(os.environ.get('PORT', 8080))
 
-@app.route('/manifest.json')
-def serve_manifest():
-        manifest_path = os.path.join(
-                    os.path.dirname(os.path.abspath(__file__)),
-                    'manifest.json'
-        )
-        return send_file(manifest_path, mimetype='application/manifest+json')
 if __name__ == '__main__':
     print("Sovereign StoryForge Server")
     print(f"Running on http://localhost:{port}")
