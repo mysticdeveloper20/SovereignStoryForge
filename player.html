@@ -11,490 +11,79 @@
 <title>Sovereign StoryForge</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  
-  body {
-    background: #12100e;
-    color: #e8dcc8;
-    font-family: 'Georgia', serif;
-    min-height: 100vh;
-  }
-
-  .header {
-    background: #1a1410;
-    padding: 14px 20px;
-    text-align: center;
-    border-bottom: 1px solid #2a2018;
-  }
-
-  .header h1 {
-    font-size: 15px;
-    color: #c9a84c;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-  }
-
-  .header p {
-    font-size: 10px;
-    color: #6b5d4a;
-    margin-top: 3px;
-    letter-spacing: 1px;
-  }
-
-  .main {
-    padding: 16px;
-    max-width: 600px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
+  body { background: #12100e; color: #e8dcc8; font-family: 'Georgia', serif; min-height: 100vh; }
+  .header { background: #1a1410; padding: 14px 20px; text-align: center; border-bottom: 1px solid #2a2018; }
+  .header h1 { font-size: 15px; color: #c9a84c; letter-spacing: 3px; text-transform: uppercase; }
+  .header p { font-size: 10px; color: #6b5d4a; margin-top: 3px; letter-spacing: 1px; }
+  .main { padding: 16px; max-width: 600px; margin: 0 auto; width: 100%; }
   .home-screen { display: block; }
   .player-screen { display: none; }
-
-  .server-status {
-    background: #1a1410;
-    border: 1px solid #2a2018;
-    border-radius: 12px;
-    padding: 12px 16px;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #4a3a28;
-    margin-right: 10px;
-    flex-shrink: 0;
-  }
-
+  .server-status { background: #1a1410; border: 1px solid #2a2018; border-radius: 12px; padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #4a3a28; margin-right: 10px; flex-shrink: 0; }
   .status-dot.online { background: #7a9a5a; }
   .status-dot.offline { background: #9a5a4a; }
   .status-info { flex: 1; }
   .status-info p { font-size: 12px; color: #a09070; }
   .status-info span { font-size: 11px; color: #6b5d4a; }
-
-  .btn-refresh {
-    background: transparent;
-    border: 1px solid #2a2018;
-    border-radius: 8px;
-    color: #6b5d4a;
-    padding: 6px 12px;
-    font-size: 12px;
-    cursor: pointer;
-    font-family: 'Georgia', serif;
-  }
-
-  .server-input {
-    background: #1a1410;
-    border: 1px solid #2a2018;
-    border-radius: 10px;
-    padding: 12px 16px;
-    color: #e8dcc8;
-    font-size: 13px;
-    width: 100%;
-    outline: none;
-    margin-bottom: 12px;
-    font-family: 'Georgia', serif;
-  }
-
+  .btn-refresh { background: transparent; border: 1px solid #2a2018; border-radius: 8px; color: #6b5d4a; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: 'Georgia', serif; }
+  .server-input { background: #1a1410; border: 1px solid #2a2018; border-radius: 10px; padding: 12px 16px; color: #e8dcc8; font-size: 13px; width: 100%; outline: none; margin-bottom: 12px; font-family: 'Georgia', serif; }
   .server-input::placeholder { color: #4a3a28; }
-
-  .novel-card {
-    background: linear-gradient(135deg, #1e1a14, #1a1410);
-    border: 1px solid #2a2018;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 16px;
-    text-align: center;
-  }
-
-  .novel-card h2 {
-    font-size: 16px;
-    color: #c9a84c;
-    line-height: 1.4;
-    margin-bottom: 6px;
-  }
-
-  .novel-card p {
-    font-size: 11px;
-    color: #6b5d4a;
-    margin-bottom: 16px;
-  }
-
-  .chapter-input-wrap {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .chapter-num-input {
-    background: #12100e;
-    border: 1px solid #3a2a18;
-    border-radius: 10px;
-    padding: 14px 16px;
-    color: #e8dcc8;
-    font-size: 18px;
-    width: 100px;
-    outline: none;
-    text-align: center;
-    font-family: 'Georgia', serif;
-  }
-
-  .btn-fetch {
-    flex: 1;
-    padding: 14px;
-    background: linear-gradient(135deg, #8a6a2a, #c9a84c);
-    border: none;
-    border-radius: 10px;
-    color: #12100e;
-    font-size: 14px;
-    font-family: 'Georgia', serif;
-    cursor: pointer;
-    letter-spacing: 1px;
-    font-weight: bold;
-  }
-
+  .novel-card { background: linear-gradient(135deg, #1e1a14, #1a1410); border: 1px solid #2a2018; border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: center; }
+  .novel-card h2 { font-size: 16px; color: #c9a84c; line-height: 1.4; margin-bottom: 6px; }
+  .novel-card p { font-size: 11px; color: #6b5d4a; margin-bottom: 16px; }
+  .chapter-input-wrap { display: flex; gap: 10px; align-items: center; }
+  .chapter-num-input { background: #12100e; border: 1px solid #3a2a18; border-radius: 10px; padding: 14px 16px; color: #e8dcc8; font-size: 18px; width: 100px; outline: none; text-align: center; font-family: 'Georgia', serif; }
+  .btn-fetch { flex: 1; padding: 14px; background: linear-gradient(135deg, #8a6a2a, #c9a84c); border: none; border-radius: 10px; color: #12100e; font-size: 14px; font-family: 'Georgia', serif; cursor: pointer; letter-spacing: 1px; font-weight: bold; }
   .btn-fetch:disabled { opacity: 0.5; }
-
-  .loading-msg {
-    text-align: center;
-    font-size: 13px;
-    color: #c9a84c;
-    padding: 16px;
-    display: none;
-  }
-
-  .error-msg {
-    background: #1a0e0e;
-    border: 1px solid #4a2a2a;
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-size: 13px;
-    color: #c08080;
-    margin-top: 12px;
-    display: none;
-  }
-
-  .settings-card {
-    background: #1a1410;
-    border: 1px solid #2a2018;
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 16px;
-  }
-
-  .settings-title {
-    font-size: 10px;
-    color: #6b5d4a;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-
-  .setting-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-
+  .loading-msg { text-align: center; font-size: 13px; color: #c9a84c; padding: 16px; display: none; }
+  .error-msg { background: #1a0e0e; border: 1px solid #4a2a2a; border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #c08080; margin-top: 12px; display: none; }
+  .settings-card { background: #1a1410; border: 1px solid #2a2018; border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+  .settings-title { font-size: 10px; color: #6b5d4a; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
+  .setting-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .setting-label { font-size: 13px; color: #a09070; }
   .setting-control { display: flex; gap: 6px; }
-
-  .opt-btn {
-    padding: 5px 10px;
-    border: 1px solid #2a2018;
-    border-radius: 6px;
-    background: #12100e;
-    color: #6b5d4a;
-    font-size: 11px;
-    cursor: pointer;
-    font-family: 'Georgia', serif;
-  }
-
-  .opt-btn.selected {
-    border-color: #c9a84c;
-    color: #c9a84c;
-    background: #1e1a10;
-  }
-
-  select.voice-pick {
-    background: #12100e;
-    border: 1px solid #2a2018;
-    border-radius: 8px;
-    padding: 6px 10px;
-    color: #e8dcc8;
-    font-size: 12px;
-    outline: none;
-    max-width: 200px;
-  }
-
-  .bookmark-info {
-    background: #1a1a10;
-    border: 1px solid #3a3018;
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-bottom: 12px;
-    font-size: 12px;
-    color: #c9a84c;
-    display: none;
-    cursor: pointer;
-  }
-
-  /* PLAYER */
-  .btn-back-home {
-    width: 100%;
-    padding: 12px;
-    background: transparent;
-    border: 1px solid #2a2018;
-    border-radius: 12px;
-    color: #6b5d4a;
-    font-size: 13px;
-    font-family: 'Georgia', serif;
-    cursor: pointer;
-    margin-bottom: 12px;
-  }
-
-  .chapter-hero {
-    background: linear-gradient(135deg, #1e1a14, #12100e);
-    border: 1px solid #2a2018;
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    text-align: center;
-  }
-
-  .chapter-hero .ep-label {
-    font-size: 9px;
-    color: #c9a84c;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .chapter-hero h2 {
-    font-size: 15px;
-    color: #e8dcc8;
-    line-height: 1.4;
-    margin-bottom: 4px;
-  }
-
+  .opt-btn { padding: 5px 10px; border: 1px solid #2a2018; border-radius: 6px; background: #12100e; color: #6b5d4a; font-size: 11px; cursor: pointer; font-family: 'Georgia', serif; }
+  .opt-btn.selected { border-color: #c9a84c; color: #c9a84c; background: #1e1a10; }
+  select.voice-pick { background: #12100e; border: 1px solid #2a2018; border-radius: 8px; padding: 6px 10px; color: #e8dcc8; font-size: 12px; outline: none; max-width: 200px; }
+  .bookmark-info { background: #1a1a10; border: 1px solid #3a3018; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: #c9a84c; display: none; cursor: pointer; }
+  .btn-back-home { width: 100%; padding: 12px; background: transparent; border: 1px solid #2a2018; border-radius: 12px; color: #6b5d4a; font-size: 13px; font-family: 'Georgia', serif; cursor: pointer; margin-bottom: 12px; }
+  .chapter-hero { background: linear-gradient(135deg, #1e1a14, #12100e); border: 1px solid #2a2018; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; text-align: center; }
+  .chapter-hero .ep-label { font-size: 9px; color: #c9a84c; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  .chapter-hero h2 { font-size: 15px; color: #e8dcc8; line-height: 1.4; margin-bottom: 4px; }
   .chapter-hero p { font-size: 11px; color: #6b5d4a; }
-
-  .progress-wrap {
-    background: #1a1410;
-    border: 1px solid #2a2018;
-    border-radius: 12px;
-    padding: 12px 16px;
-    margin-bottom: 12px;
-  }
-
-  .progress-bar-bg {
-    background: #2a2018;
-    border-radius: 4px;
-    height: 6px;
-    margin-bottom: 8px;
-    cursor: pointer;
-  }
-
-  .progress-bar-fill {
-    background: linear-gradient(90deg, #8a6a2a, #c9a84c);
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.3s;
-    width: 0%;
-  }
-
-  .progress-text {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: #6b5d4a;
-  }
-
-  .caption-box {
-    background: #1a1410;
-    border: 1px solid #2a2018;
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 12px;
-    min-height: 130px;
-  }
-
-  .caption-label {
-    font-size: 9px;
-    color: #c9a84c;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .caption-text {
-    font-size: 17px;
-    line-height: 1.9;
-    color: #c8b890;
-  }
-
-  .audio-loading {
-    text-align: center;
-    font-size: 12px;
-    color: #c9a84c;
-    padding: 8px;
-    display: none;
-  }
-
-  .controls {
-    display: grid;
-    grid-template-columns: 1fr 1.4fr 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .ctrl-btn {
-    padding: 14px 8px;
-    border: 1px solid #2a2018;
-    border-radius: 12px;
-    background: #1a1410;
-    color: #a09070;
-    font-size: 13px;
-    cursor: pointer;
-    text-align: center;
-    font-family: 'Georgia', serif;
-  }
-
-  .ctrl-btn.primary {
-    background: linear-gradient(135deg, #8a6a2a, #c9a84c);
-    border-color: transparent;
-    color: #12100e;
-    font-size: 22px;
-    font-weight: bold;
-  }
-
-  .ctrl-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .speed-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #1a1410;
-    border: 1px solid #2a2018;
-    border-radius: 12px;
-    padding: 10px 14px;
-    margin-bottom: 10px;
-  }
-
+  .progress-wrap { background: #1a1410; border: 1px solid #2a2018; border-radius: 12px; padding: 12px 16px; margin-bottom: 12px; }
+  .progress-bar-bg { background: #2a2018; border-radius: 4px; height: 6px; margin-bottom: 8px; cursor: pointer; }
+  .progress-bar-fill { background: linear-gradient(90deg, #8a6a2a, #c9a84c); height: 100%; border-radius: 4px; transition: width 0.3s; width: 0%; }
+  .progress-text { display: flex; justify-content: space-between; font-size: 11px; color: #6b5d4a; }
+  .caption-box { background: #1a1410; border: 1px solid #2a2018; border-radius: 14px; padding: 18px; margin-bottom: 12px; min-height: 130px; }
+  .caption-label { font-size: 9px; color: #c9a84c; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+  .caption-text { font-size: 17px; line-height: 1.9; color: #c8b890; }
+  .controls { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .ctrl-btn { padding: 14px 8px; border: 1px solid #2a2018; border-radius: 12px; background: #1a1410; color: #a09070; font-size: 13px; cursor: pointer; text-align: center; font-family: 'Georgia', serif; }
+  .ctrl-btn.primary { background: linear-gradient(135deg, #8a6a2a, #c9a84c); border-color: transparent; color: #12100e; font-size: 22px; font-weight: bold; }
+  .speed-row { display: flex; align-items: center; justify-content: space-between; background: #1a1410; border: 1px solid #2a2018; border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; }
   .speed-row span { font-size: 12px; color: #6b5d4a; }
   .speed-btns { display: flex; gap: 6px; }
-
-  .spd-btn {
-    padding: 5px 10px;
-    border: 1px solid #2a2018;
-    border-radius: 6px;
-    background: #12100e;
-    color: #6b5d4a;
-    font-size: 11px;
-    cursor: pointer;
-    font-family: 'Georgia', serif;
-  }
-
+  .spd-btn { padding: 5px 10px; border: 1px solid #2a2018; border-radius: 6px; background: #12100e; color: #6b5d4a; font-size: 11px; cursor: pointer; font-family: 'Georgia', serif; }
   .spd-btn.on { border-color: #c9a84c; color: #c9a84c; }
-
-  .auto-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #1a1410;
-    border: 1px solid #2a2018;
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-    cursor: pointer;
-  }
-
+  .auto-row { display: flex; align-items: center; justify-content: space-between; background: #1a1410; border: 1px solid #2a2018; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer; }
   .auto-row p { font-size: 13px; color: #e8dcc8; }
   .auto-row span { font-size: 11px; color: #6b5d4a; }
-
-  .toggle {
-    width: 44px;
-    height: 24px;
-    background: #2a2018;
-    border-radius: 12px;
-    position: relative;
-    transition: background 0.3s;
-    flex-shrink: 0;
-  }
-
+  .toggle { width: 44px; height: 24px; background: #2a2018; border-radius: 12px; position: relative; transition: background 0.3s; flex-shrink: 0; }
   .toggle.on { background: #8a6a2a; }
-
-  .toggle-dot {
-    width: 18px;
-    height: 18px;
-    background: #e8dcc8;
-    border-radius: 50%;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    transition: left 0.3s;
-  }
-
+  .toggle-dot { width: 18px; height: 18px; background: #e8dcc8; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: left 0.3s; }
   .toggle.on .toggle-dot { left: 23px; }
-
-  .player-status {
-    text-align: center;
-    font-size: 11px;
-    color: #4a3a28;
-    padding: 4px;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-  }
-
+  .player-status { text-align: center; font-size: 11px; color: #4a3a28; padding: 4px; letter-spacing: 1px; margin-bottom: 8px; }
   .player-status.playing { color: #c9a84c; }
   .player-status.paused { color: #a09070; }
   .player-status.done { color: #7a9a5a; }
   .player-status.loading { color: #8090a0; }
-
-  .para-list {
-    background: #1a1410;
-    border: 1px solid #2a2018;
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
-
-  .para-list-hdr {
-    padding: 10px 16px;
-    font-size: 10px;
-    color: #6b5d4a;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    border-bottom: 1px solid #2a2018;
-  }
-
-  .para-item {
-    padding: 10px 16px;
-    font-size: 12px;
-    color: #6b5d4a;
-    border-bottom: 1px solid #12100e;
-    cursor: pointer;
-    line-height: 1.5;
-  }
-
+  .para-list { background: #1a1410; border: 1px solid #2a2018; border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+  .para-list-hdr { padding: 10px 16px; font-size: 10px; color: #6b5d4a; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #2a2018; }
+  .para-item { padding: 10px 16px; font-size: 12px; color: #6b5d4a; border-bottom: 1px solid #12100e; cursor: pointer; line-height: 1.5; }
   .para-item:last-child { border-bottom: none; }
   .para-item:active { background: #2a1e10; }
-
-  .para-item.current {
-    color: #e8dcc8;
-    background: #2a1e10;
-    border-left: 3px solid #c9a84c;
-    padding-left: 13px;
-  }
-
+  .para-item.current { color: #e8dcc8; background: #2a1e10; border-left: 3px solid #c9a84c; padding-left: 13px; }
   .para-item.done { color: #2a2018; }
 </style>
 </head>
@@ -519,12 +108,7 @@
       <button class="btn-refresh" onclick="checkServer()">↻ Check</button>
     </div>
 
-    <input
-      class="server-input"
-      id="serverIP"
-      placeholder="Custom server IP (optional)"
-      type="text"
-    />
+    <input class="server-input" id="serverIP" placeholder="Custom server IP (optional)" type="text" />
 
     <div class="bookmark-info" id="bookmarkInfo" onclick="resumeBookmark()">
       📖 Resume: <span id="bookmarkText"></span>
@@ -534,17 +118,8 @@
       <h2>Weakest Beast Tamer Gets All SSS Dragons</h2>
       <p>by Dagzo · Fantasy · 908+ Chapters · Ongoing</p>
       <div class="chapter-input-wrap">
-        <input
-          class="chapter-num-input"
-          id="chapterNum"
-          type="number"
-          value="363"
-          min="1"
-          max="999"
-        />
-        <button class="btn-fetch" id="fetchBtn" onclick="fetchChapter()">
-          ▶ &nbsp; Load Chapter
-        </button>
+        <input class="chapter-num-input" id="chapterNum" type="number" value="363" min="1" max="999" />
+        <button class="btn-fetch" id="fetchBtn" onclick="fetchChapter()">▶ &nbsp; Load Chapter</button>
       </div>
     </div>
 
@@ -556,10 +131,10 @@
       <div class="setting-row">
         <span class="setting-label">Voice</span>
         <select class="voice-pick" id="voicePick" onchange="saveVoicePreference()">
-          <option value="en-US-GuyNeural">⭐ Guy (Male)</option>
-          <option value="en-US-AriaNeural">Aria (Female)</option>
+          <option value="en-US-GuyNeural">⭐ Guy (Male US)</option>
           <option value="en-GB-RyanNeural">Ryan (Male UK)</option>
           <option value="en-AU-WilliamNeural">William (Male AU)</option>
+          <option value="en-US-AriaNeural">Aria (Female US)</option>
           <option value="en-US-JennyNeural">Jenny (Female US)</option>
         </select>
       </div>
@@ -567,7 +142,7 @@
         <span class="setting-label">Speed</span>
         <div class="setting-control">
           <button class="opt-btn" onclick="setSpeed(0.8)">0.8×</button>
-          <button class="opt-btn selected" id="speed1" onclick="setSpeed(1.0)">1×</button>
+          <button class="opt-btn selected" onclick="setSpeed(1.0)">1×</button>
           <button class="opt-btn" onclick="setSpeed(1.15)">1.15×</button>
           <button class="opt-btn" onclick="setSpeed(1.3)">1.3×</button>
         </div>
@@ -600,20 +175,14 @@
     <div class="caption-box">
       <div class="caption-label">Reading</div>
       <div class="caption-text" id="captionText">Press play to begin...</div>
-      <div class="audio-loading" id="audioLoading">⟳ Generating audio...</div>
     </div>
 
-    <!-- Hidden audio element -->
-    <audio id="audioPlayer" preload="auto"></audio>
+    <audio id="audioPlayer" preload="none"></audio>
 
     <div class="controls">
-      <button class="ctrl-btn" id="backBtn" onclick="skipBack()">
-        ⏮<br><span style="font-size:10px">Back</span>
-      </button>
+      <button class="ctrl-btn" onclick="skipBack()">⏮<br><span style="font-size:10px">Back</span></button>
       <button class="ctrl-btn primary" id="playBtn" onclick="togglePlay()">▶</button>
-      <button class="ctrl-btn" id="nextBtn" onclick="skipForward()">
-        ⏭<br><span style="font-size:10px">Next</span>
-      </button>
+      <button class="ctrl-btn" onclick="skipForward()">⏭<br><span style="font-size:10px">Next</span></button>
     </div>
 
     <div class="speed-row">
@@ -648,6 +217,12 @@
 </div>
 
 <script>
+// ── URLS ──────────────────────────────────────────
+// Cloudflare — fetches chapters (bypasses site blocks)
+const CHAPTER_URL = 'https://sovereignstoryforge.devenrabadiya.workers.dev';
+// Render — generates Edge TTS audio
+const SPEAK_URL = 'https://sovereignstoryforge.onrender.com';
+
 // ── STATE ─────────────────────────────────────────
 let paragraphs = [];
 let currentIndex = 0;
@@ -655,18 +230,10 @@ let isPlaying = false;
 let currentChapter = 363;
 let readingSpeed = 1.0;
 let autoAdvance = true;
-let isLoadingAudio = false;
 
 const audio = document.getElementById('audioPlayer');
 
-// ── SERVER ────────────────────────────────────────
-function getServerURL() {
-  const input = document.getElementById('serverIP').value.trim();
-  return input
-    ? `https://${input}`
-    : `https://sovereignstoryforge.onrender.com`;
-}
-
+// ── SERVER CHECK ──────────────────────────────────
 async function checkServer() {
   const dot = document.getElementById('statusDot');
   const txt = document.getElementById('statusText');
@@ -674,7 +241,7 @@ async function checkServer() {
   dot.className = 'status-dot';
   txt.textContent = 'Checking...';
   try {
-    const res = await fetch(`${getServerURL()}/ping`, {
+    const res = await fetch(`${SPEAK_URL}/ping`, {
       signal: AbortSignal.timeout(8000)
     });
     const data = await res.json();
@@ -700,24 +267,22 @@ function saveVoicePreference() {
 
 function restoreVoicePreference() {
   const saved = localStorage.getItem('sovforge_voice');
-  if (saved) {
-    const sel = document.getElementById('voicePick');
-    if (sel) sel.value = saved;
-  }
+  if (!saved) return;
+  const sel = document.getElementById('voicePick');
+  if (sel) sel.value = saved;
 }
 
 // ── BOOKMARK ──────────────────────────────────────
 function saveBookmark(chapter, paraIndex) {
-  localStorage.setItem('sovforge_bookmark', JSON.stringify({
-    chapter, paraIndex
-  }));
+  localStorage.setItem('sovforge_bookmark',
+    JSON.stringify({ chapter, paraIndex })
+  );
 }
 
 function loadBookmark() {
   try {
-    const saved = localStorage.getItem('sovforge_bookmark');
-    if (!saved) return null;
-    return JSON.parse(saved);
+    const s = localStorage.getItem('sovforge_bookmark');
+    return s ? JSON.parse(s) : null;
   } catch(e) { return null; }
 }
 
@@ -764,11 +329,9 @@ const NOISE = [
   /^\d+$/,
 ];
 
-function isNoise(text) {
-  return NOISE.some(p => p.test(text));
-}
+function isNoise(t) { return NOISE.some(p => p.test(t)); }
 
-// ── FETCH CHAPTER ─────────────────────────────────
+// ── FETCH CHAPTER — via Cloudflare ────────────────
 async function fetchChapter(resumeAt = 0) {
   const num = parseInt(document.getElementById('chapterNum').value);
   if (!num || num < 1) return;
@@ -782,7 +345,7 @@ async function fetchChapter(resumeAt = 0) {
   if (errMsg) errMsg.style.display = 'none';
 
   try {
-    const res = await fetch(`${getServerURL()}/chapter/${num}`, {
+    const res = await fetch(`${CHAPTER_URL}/chapter/${num}`, {
       signal: AbortSignal.timeout(25000)
     });
     if (!res.ok) throw new Error('Chapter not found');
@@ -835,7 +398,7 @@ function showCaption(index) {
   caption.textContent = paragraphs[index];
 }
 
-// ── AUDIO PLAYBACK ────────────────────────────────
+// ── PLAY PARAGRAPH — audio via Render TTS ─────────
 async function playParagraph(index) {
   if (index >= paragraphs.length) {
     onChapterEnd();
@@ -848,21 +411,16 @@ async function playParagraph(index) {
   updateProgress();
   saveBookmark(currentChapter, index);
 
-  const text = paragraphs[index];
-  const voice = getSelectedVoice();
-
-  // Show loading
-  isLoadingAudio = true;
   setPlayerStatus('loading', '⟳ Generating audio...');
-  const audioLoading = document.getElementById('audioLoading');
-  if (audioLoading) audioLoading.style.display = 'block';
 
   try {
-    // Request TTS from server
-    const res = await fetch(`${getServerURL()}/speak`, {
+    const res = await fetch(`${SPEAK_URL}/speak`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, voice }),
+      body: JSON.stringify({
+        text: paragraphs[index],
+        voice: getSelectedVoice()
+      }),
       signal: AbortSignal.timeout(30000)
     });
 
@@ -879,10 +437,7 @@ async function playParagraph(index) {
     audio.src = url;
     audio.playbackRate = readingSpeed;
     await audio.play();
-
-    if (audioLoading) audioLoading.style.display = 'none';
     setPlayerStatus('playing', '📖 Playing');
-    isLoadingAudio = false;
 
     audio.onended = () => {
       URL.revokeObjectURL(url);
@@ -892,8 +447,6 @@ async function playParagraph(index) {
     };
 
   } catch(e) {
-    isLoadingAudio = false;
-    if (audioLoading) audioLoading.style.display = 'none';
     if (isPlaying) {
       setTimeout(() => playParagraph(currentIndex + 1), 500);
     }
@@ -909,7 +462,7 @@ async function onChapterEnd() {
     setPlayerStatus('loading', `Loading Chapter ${currentChapter + 1}...`);
     try {
       const res = await fetch(
-        `${getServerURL()}/chapter/${currentChapter + 1}`,
+        `${CHAPTER_URL}/chapter/${currentChapter + 1}`,
         { signal: AbortSignal.timeout(25000) }
       );
       const data = await res.json();
@@ -936,12 +489,11 @@ async function onChapterEnd() {
 // ── CONTROLS ──────────────────────────────────────
 function togglePlay() {
   if (!paragraphs.length) return;
-
   if (!isPlaying) {
     isPlaying = true;
     const pb = document.getElementById('playBtn');
     if (pb) pb.textContent = '⏸';
-    if (audio.src && audio.paused) {
+    if (audio.src && audio.paused && audio.readyState > 0) {
       audio.play();
       setPlayerStatus('playing', '📖 Playing');
     } else {
@@ -957,39 +509,34 @@ function togglePlay() {
 }
 
 function skipForward() {
-  if (currentIndex < paragraphs.length - 1) {
-    if (isPlaying) {
-      audio.pause();
-      playParagraph(currentIndex + 1);
-    } else {
-      currentIndex++;
-      showCaption(currentIndex);
-      updateParaList();
-      updateProgress();
-    }
+  if (currentIndex >= paragraphs.length - 1) return;
+  audio.pause();
+  if (isPlaying) playParagraph(currentIndex + 1);
+  else {
+    currentIndex++;
+    showCaption(currentIndex);
+    updateParaList();
+    updateProgress();
   }
 }
 
 function skipBack() {
-  if (currentIndex > 0) {
-    if (isPlaying) {
-      audio.pause();
-      playParagraph(currentIndex - 1);
-    } else {
-      currentIndex--;
-      showCaption(currentIndex);
-      updateParaList();
-      updateProgress();
-    }
+  if (currentIndex <= 0) return;
+  audio.pause();
+  if (isPlaying) playParagraph(currentIndex - 1);
+  else {
+    currentIndex--;
+    showCaption(currentIndex);
+    updateParaList();
+    updateProgress();
   }
 }
 
 function jumpTo(index) {
+  audio.pause();
   currentIndex = index;
-  if (isPlaying) {
-    audio.pause();
-    playParagraph(index);
-  } else {
+  if (isPlaying) playParagraph(index);
+  else {
     showCaption(index);
     updateParaList();
     updateProgress();
@@ -1008,12 +555,10 @@ function setSpeed(s) {
   readingSpeed = s;
   audio.playbackRate = s;
   document.querySelectorAll('.opt-btn').forEach(b => {
-    if (b.textContent.trim() === s + '×') b.classList.add('selected');
-    else b.classList.remove('selected');
+    b.classList.toggle('selected', b.textContent.trim() === s + '×');
   });
   document.querySelectorAll('.spd-btn').forEach(b => {
-    if (b.textContent.trim() === s + '×') b.classList.add('on');
-    else b.classList.remove('on');
+    b.classList.toggle('on', b.textContent.trim() === s + '×');
   });
   localStorage.setItem('sovforge_speed', s);
 }
@@ -1024,7 +569,7 @@ function toggleAutoAdvance() {
   if (t) t.className = 'toggle' + (autoAdvance ? ' on' : '');
 }
 
-// ── UI HELPERS ────────────────────────────────────
+// ── UI ────────────────────────────────────────────
 function renderParaList() {
   const list = document.getElementById('paraList');
   if (!list) return;
@@ -1052,8 +597,7 @@ function updateParaList() {
 }
 
 function updateProgress() {
-  const pct = paragraphs.length
-    ? (currentIndex / paragraphs.length) * 100 : 0;
+  const pct = paragraphs.length ? (currentIndex / paragraphs.length) * 100 : 0;
   const fill = document.getElementById('progressFill');
   const cur = document.getElementById('progCurrent');
   const tot = document.getElementById('progTotal');
@@ -1084,7 +628,6 @@ function goHome() {
 checkServer();
 restoreVoicePreference();
 setTimeout(checkBookmark, 500);
-
 const savedSpeed = localStorage.getItem('sovforge_speed');
 if (savedSpeed) readingSpeed = parseFloat(savedSpeed);
 </script>
