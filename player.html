@@ -1185,14 +1185,15 @@ function setSpeed(s) {
 
 function setPauses(on) {
   dramaticPauses = on;
-  document.getElementById('pauseOn').className = 'opt-btn' + (on ? ' selected' : '');
-  document.getElementById('pauseOff').className = 'opt-btn' + (!on ? ' selected' : '');
+  const pauseOn = document.getElementById('pauseOn');
+  const pauseOff = document.getElementById('pauseOff');
+  if (pauseOn) pauseOn.className = 'opt-btn' + (on ? ' selected' : '');
+  if (pauseOff) pauseOff.className = 'opt-btn' + (!on ? ' selected' : '');
 }
-
 function toggleAutoAdvance() {
   autoAdvance = !autoAdvance;
-  document.getElementById('autoToggle').className =
-    'toggle' + (autoAdvance ? ' on' : '');
+  const toggle = document.getElementById('autoToggle');
+  if (toggle) toggle.className = 'toggle' + (autoAdvance ? ' on' : '');
 }
 
 // ── UI HELPERS ────────────────────────────────────
