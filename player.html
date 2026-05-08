@@ -1239,10 +1239,11 @@ function goHome() {
   speechSynthesis.cancel();
   isPlaying = false;
   isPaused = false;
-  document.getElementById('playBtn').textContent = '▶';
+  const playBtn = document.getElementById('playBtn');
+  if (playBtn) playBtn.textContent = '▶';
   document.getElementById('homeScreen').style.display = 'block';
   document.getElementById('playerScreen').style.display = 'none';
-  checkBookmark();
+  setTimeout(checkBookmark, 300);
 }
 
 // ── RESTORE PREFERENCES ───────────────────────────
@@ -1250,6 +1251,7 @@ function restorePreferences() {
   const speed = localStorage.getItem('sovforge_speed');
   if (speed) setSpeed(parseFloat(speed));
 }
+ try { restorePreferences(); } catch(e) {}
 
 // ── INIT ──────────────────────────────────────────
 checkServer();
